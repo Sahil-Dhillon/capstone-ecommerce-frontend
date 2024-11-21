@@ -10,6 +10,7 @@ import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 import AuthLayout from './layout/auth';
 import MainLayout from './layout/main';
+import CategoriesPage from './pages/Category';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
             <MainLayout>
               <Routes>
                 <Route path="" element={<Home />} />
+                <Route path="categories" element={<CategoriesPage/>}/>
                 <Route path="about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
               </Routes>

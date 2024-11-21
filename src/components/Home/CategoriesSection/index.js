@@ -2,7 +2,7 @@
 import React from 'react';
 import './CategorySection.css';
 import phone_img from '../../../assets/img/categories/phones.png'
-import fashion_img from '../../../assets/img/categories/fashion1.jpg'
+import fashion_img from '../../../assets/img/categories/fashion.png'
 import appliances_img from '../../../assets/img/categories/appliance.png'
 const categories = [
   {
