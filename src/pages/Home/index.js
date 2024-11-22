@@ -12,7 +12,7 @@ const Home = () => {
     <CategorySection />
     <ImageHero/>
     <TextBanner/>
-    <ProductCarousel/>
+    <ProductCarousel title="Featured Products" autoScroll={true}/>
     </>
 };
 
