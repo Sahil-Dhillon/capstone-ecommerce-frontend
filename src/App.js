@@ -11,11 +11,13 @@ import Register from './pages/Auth/Register';
 import AuthLayout from './layout/auth';
 import MainLayout from './layout/main';
 import CategoriesPage from './pages/Category';
+import CustomCursor from './components/Global/Cursor';
 
 function App() {
   return (
     <Router>
       {/* <Navbar /> */}
+      <CustomCursor/>
       <Routes>
       <Route
           path="/auth/*"

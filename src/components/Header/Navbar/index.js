@@ -1,7 +1,7 @@
 import React from 'react';
 import typo_logo from '../../../assets/img/logos/2-removebg-preview.png'
 import small_logo from '../../../assets/img/logos/uw-logo-no-bg-black.png'
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 const Navbar = () => {
     const location = useLocation(); // Get current route
   const isHomePage = location.pathname === "/";
@@ -20,10 +20,10 @@ const Navbar = () => {
             <div className="d-flex justify-content-between align-items-center p-3">
                 <div>
                     {/* Logo */}
-                    <a href="/" className="navbar-brand">
+                    <Link to="/" className="navbar-brand">
                         <img src={small_logo} alt="Logo" style={{ width: '60px' }} />
                         <img src={typo_logo} alt="Logo" style={{ height: '50px' }} />
-                    </a>
+                    </Link>
                 </div>
 
                 {/* Search Bar */}
