@@ -20,7 +20,7 @@ function App() {
   return (
     <Router>
       {/* <Navbar /> */}
-      <CustomCursor/>
+      {/* <CustomCursor/> */}
       <Routes>
       <Route
           path="/auth/*"
@@ -39,9 +39,11 @@ function App() {
             <MainLayout>
               <Routes>
                 <Route path="" element={<Home />} />
-                <Route path="categories" element={<CategoriesPage/>}/>
+                <Route path="/category/:categoryName" element={<CategoriesPage/>}/>
+                <Route path="/products/:subCategoryName" element={<ProductListPage/>}/>
+
                 <Route path="/products" element={<ProductListPage/>}/>
-                <Route path="/jordan" element={<ProductPage/>}/>
+                <Route path="/product/:productId" element={<ProductPage/>}/>
                 <Route path='/cart' element={<CartPage/>}/>
                 <Route path="about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />

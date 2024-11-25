@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import ImageGallery from "./ImageGallery";
 // import ProductDetails from "./ProductDetails";
 
@@ -9,12 +9,35 @@ import ProductBelowDetails from "../../components/Product/ProductBelowDetails";
 import ProductCarousel from "../../components/Home/ProductCarousel";
 import Ratings from "../../components/Product/Rating";
 import ReviewsList from "../../components/Product/ReviewList";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const ProductPage = () => {
   const [selectedImage, setSelectedImage] = useState(0);
+  // const {subCategoryName,productId}= useParams();
+
+  //   // const { subCategoryName } = useParams(); // Extract subCategoryName from URL
+  //   // console.log(subCategoryName)
+  //   const [product, setProduct] = useState({});
+  //   // const [subcategory, setSubcategory] = useState([])
+  //   const [loading, setLoading] = useState(true);
+  //   const [error, setError] = useState(null);
+  //   // const [category, setCategory] = useState({});
+  
+  //   useEffect(() => {
+  //     axios.get(`http://localhost:8085/product/${productId}`).then((res)=>{
+  //       setProduct(res.data)
+  //     }).then(setLoading(false))
+      
+    
+  //   }, [subCategoryName]);
+
+  //   if (loading) {
+  //       return <h2>Loading {subCategoryName}...</h2>;
+  //   }
 
   // Product data
-  const product = {
+  const product_test = {
     name: "Jordan Sport Hoop Fleece",
     description: "Men's Dri-FIT Full-Zip Hoodie",
     price: "₹ 5,695.00",
@@ -30,7 +53,7 @@ const ProductPage = () => {
     unavailableSizes: ["US XXL"],
     rating:2.0
   };
-  const product2 =
+  const product =
     {
         "vendorId": "203",
         "name": "Wireless Earbuds",
@@ -96,25 +119,25 @@ const ProductPage = () => {
             <div className="image-gallery">
 
       <ImageGallery
-        images={product.images}
+        images={product_test.images}
         selectedImage={selectedImage}
         setSelectedImage={setSelectedImage}
         />
         </div>
       <img
         className="main-image"
-        src={product.images[selectedImage]}
+        src={product_test.images[selectedImage]}
         alt="Selected Product"
         />
         </div>
-      <ProductTopDetails product={product2} />
+      <ProductTopDetails product={product} />
     </div>
     <div className="product-below-details">
-        <ProductBelowDetails product={product2} />
+        <ProductBelowDetails product={product} />
     </div>
     <ProductCarousel title="YOU MIGHT ALSO LIKE" autoScroll={false}/>
     <div className="m-5">
-        <Ratings product={product2} />
+        <Ratings product={product} />
         
       </div>
     </div>

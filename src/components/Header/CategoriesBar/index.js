@@ -1,6 +1,33 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 
 const CategoriesBar = () => {
+    const [categories, setCategories] = useState([]); // State to store categories
+    const [loading, setLoading] = useState(true); // State for loading
+    const [error, setError] = useState(null); // State for errors
+
+
+    useEffect(() => {
+    axios.get("http://localhost:8085/category/all")
+        .then((response) => {
+        setCategories(response.data); // Set categories data
+        console.log(response.data)
+        setLoading(false); // Set loading to false
+        })
+        .catch((err) => {
+        setError(err.message); // Set error message
+        setLoading(false); // Set loading to false
+        });
+    }, []);
+
+  // Render loading state
+
+
+  // Render error state
+//   if (error) {
+//     return <div>Error: {error}</div>;
+//   }
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
                 <div className="container-fluid">
@@ -19,31 +46,18 @@ const CategoriesBar = () => {
                 
     <div className="collapse navbar-collapse" id="navbarCategories">
                         <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
-                            <li className="nav-item">
-                                <a className="nav-link" href="/electronics">
-                                    Electronics
-                                </a>
+
+                            {categories.map((category,index)=>{
+                                return(
+                            <li className="nav-item" key={index}>
+                                <Link className="nav-link" to={`/category/${category.name.toLowerCase()}`}>
+                                    {category.name}
+                                </Link>
                             </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="/fashion">
-                                    Fashion
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="/home-appliances">
-                                    Home Appliances
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="/books">
-                                    Books
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="/sports">
-                                    Sports
-                                </a>
-                            </li>
+                                )
+                            })}
+                            
+                            
                         </ul>
                     </div>
                     </div>

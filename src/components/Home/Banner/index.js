@@ -29,7 +29,7 @@ const Banner = () => {
         <div className='category-nav'>men</div>
         <div className='category-nav'>women</div>
         <div className='category-nav'>kids</div>
-        <div className='category-nav'><Link to="/categories" style={{ textDecoration: "none", color: "inherit" }}>more</Link></div>
+        <div className='category-nav'><Link to="/category/Clothing" style={{ textDecoration: "none", color: "inherit" }}>more</Link></div>
       </div>
     </div>
   );
