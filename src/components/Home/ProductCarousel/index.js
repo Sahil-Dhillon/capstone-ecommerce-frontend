@@ -39,17 +39,18 @@ const products = [
   // Add more product objects as needed
 ];
 
-const ProductCarousel = () => {
+const ProductCarousel = ({title, autoScroll}) => {
     const carouselRef = useRef(null);
     useEffect(() => {
         const handleScroll = () => {
           const scrollY = window.scrollY; // Get vertical scroll position
           if (carouselRef.current) {
-            carouselRef.current.scrollLeft = scrollY*0.2; // Sync vertical scroll with horizontal carousel scroll
+            carouselRef.current.scrollLeft = scrollY*0.25; // Sync vertical scroll with horizontal carousel scroll
           }
         };
-    
-        window.addEventListener("scroll", handleScroll);
+        if(autoScroll){
+          window.addEventListener("scroll", handleScroll);
+        }
     
         return () => {
           window.removeEventListener("scroll", handleScroll);
@@ -57,7 +58,7 @@ const ProductCarousel = () => {
       }, []);
     return (
       <div style={styles.container}>
-        <h2 style={styles.heading}>Featured Products</h2>
+        <h2 style={styles.heading}>{title}</h2>
         <div ref={carouselRef} style={styles.carousel}>
           {products.map((product) => (
             <div key={product.id} style={styles.productCard}>

@@ -1,0 +1,11 @@
+.cart-item {
+    background: #fff;
+    border-radius: 5px;
+  }
+  
+  .cart-summary {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  

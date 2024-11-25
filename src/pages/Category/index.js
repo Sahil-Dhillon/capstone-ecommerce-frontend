@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const CategoriesPage = () => {
   const category = {
@@ -33,7 +34,7 @@ const CategoriesPage = () => {
       <div style={{ padding: "20px", background: "#f9f9f9", borderRadius: "5px" }}>
         {category.subcategories.map((subcategory) => (
           <div key={subcategory.name} style={{ marginBottom: "40px" }}>
-            <h2 style={{ marginBottom: "10px", color: "#333" }}>{subcategory.name}</h2>
+            <Link to="/products" style={{ marginBottom: "10px", color: "#333",fontSize:'1.2rem',textDecoration:'none' }}>{subcategory.name}</Link>
             <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
               {subcategory.products.map((product) => (
                 <div

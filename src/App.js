@@ -12,6 +12,9 @@ import AuthLayout from './layout/auth';
 import MainLayout from './layout/main';
 import CategoriesPage from './pages/Category';
 import CustomCursor from './components/Global/Cursor';
+import ProductListPage from './pages/ProductsList';
+import ProductPage from './pages/Product';
+import CartPage from './pages/Cart';
 
 function App() {
   return (
@@ -37,6 +40,9 @@ function App() {
               <Routes>
                 <Route path="" element={<Home />} />
                 <Route path="categories" element={<CategoriesPage/>}/>
+                <Route path="/products" element={<ProductListPage/>}/>
+                <Route path="/jordan" element={<ProductPage/>}/>
+                <Route path='/cart' element={<CartPage/>}/>
                 <Route path="about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
               </Routes>
