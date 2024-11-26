@@ -1,64 +1,3 @@
-// import React from 'react';
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import { Link } from 'react-router-dom';
-// const Login = () => {
-//     return (
-//       <div
-//         style={{
-//           background: 'linear-gradient(to right, #44318D, #2A1B3D)',
-//           color: 'white',
-//           minHeight: '100vh',
-//           display: 'flex',
-//           justifyContent: 'center',
-//           alignItems: 'center',
-//         }}
-//       >
-//         <div
-//           className="card p-4"
-//           style={{
-//             backgroundColor: '#2A1B3D',
-//             width: '350px',
-//             borderRadius: '10px',
-//             boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.6)',
-//             color:'white'
-//           }}
-//         >
-//           <h2 className="text-center mb-4" style={{ color: '#fff' }}>
-//             Login
-//           </h2>
-//           <form>
-//             <div className="mb-3">
-//               <label className="form-label">Email</label>
-//               <input type="email" className="form-control" placeholder="Enter your email" />
-//             </div>
-//             <div className="mb-3">
-//               <label className="form-label">Password</label>
-//               <input type="password" className="form-control" placeholder="Enter your password" />
-//             </div>
-//             <div className="mb-3">
-//               <label className="form-label">Login as</label>
-//               <select className="form-select">
-//                 <option value="customer">Customer</option>
-//                 <option value="vendor">Vendor</option>
-//               </select>
-//             </div>
-//             <button
-//               type="submit"
-//               className="btn w-100"
-//               style={{ backgroundColor: '#D83F87', color: 'white' }}
-//             >
-//               Login
-//             </button>
-//           </form>
-//           <p className="text-center mt-3">
-//             Don't have an account? <Link to="/register" style={{ color: '#D83F87' }}>Register</Link>
-//           </p>
-//         </div>
-//       </div>
-//     );
-//   };
-  
-//   export default Login;
 
 import React from "react";
 import { Link } from "react-router-dom";
@@ -131,7 +70,7 @@ const Login = () => {
           {/* Link to Register */}
           <p className="text-center mt-3">
             Don't have an account?{" "}
-            <Link to="/register" style={{ color: "#D83F87", cursor: "pointer" }}>
+            <Link to="/auth/register" style={{ color: "#D83F87", cursor: "pointer" }}>
               Sign up
             </Link>
           </p>

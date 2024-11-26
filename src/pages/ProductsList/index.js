@@ -5,6 +5,8 @@ import './ProductListPage.css'
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import CategoriesBar from "../../components/Header/CategoriesBar";
+import Loading from "../../components/Loading";
+import ErrorPage from "../../components/Error";
 // import Sidebar from "./Sidebar";
 // import ProductCard from "./ProductCard";
 
@@ -24,14 +26,24 @@ const ProductListPage = () => {
         setSubcategory(res.data)
         axios.get(`http://localhost:8085/product/findBySubCategory/${res.data.subcategoryId}?pageSize=3`).then((products_res)=>{
           setProducts(products_res.data)
+          setLoading(false)
         })
-      }).then(setLoading(false))
-      
+      })
+      .catch((err) => {
+        setError(err.message); // Set error message
+        setLoading(false); // Set loading to false
+        });
     
     }, [subCategoryName]);
 
     if (loading) {
-        return <h2>Loading {subCategoryName}...</h2>;
+      return (
+        <Loading message={"Loading "+ subCategoryName}/>
+      );
+    }
+    if (error){
+      return(
+        <ErrorPage message={error}/>);
     }
 
   // Toggle Sidebar Visibility

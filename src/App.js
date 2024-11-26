@@ -15,7 +15,13 @@ import CustomCursor from './components/Global/Cursor';
 import ProductListPage from './pages/ProductsList';
 import ProductPage from './pages/Product';
 import CartPage from './pages/Cart';
-
+import Dashboard from "./pages/Admin/Dashboard";
+import Category from "./pages/Admin/Category";
+import Order from "./pages/Admin/Order";
+import Product from "./pages/Admin/Product";
+import SubCategory from "./pages/Admin/SubCategory";
+import User from "./pages/Admin/User";
+import AdminLayout from './layout/admin';
 function App() {
   return (
     <Router>
@@ -45,12 +51,34 @@ function App() {
                 <Route path="/products" element={<ProductListPage/>}/>
                 <Route path="/product/:productId" element={<ProductPage/>}/>
                 <Route path='/cart' element={<CartPage/>}/>
-                <Route path="about" element={<About />} />
+                <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
-              </Routes>
+              
+        
+      </Routes>
             </MainLayout>
           }
         />
+          <Route
+          path="/admin/*"
+          element={
+            <AdminLayout>
+              <Routes>
+                {/* <Route path="" element={<Dashboard />} /> */}
+                <Route path="/categories" element={<Category />} />
+                <Route path="/orders" element={<Order />} />
+                <Route path="/products" element={<Product />} />
+                <Route path="/subcategories" element={<SubCategory />} />
+                <Route path="/users" element={<User />} />
+                </Routes>
+
+            </AdminLayout>
+            
+            
+          }
+          />
+            
+          
         {/* <Route path="/" element={<Home />} /> */}
         {/* <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} /> */}

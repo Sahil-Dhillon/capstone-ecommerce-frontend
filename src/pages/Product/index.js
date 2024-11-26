@@ -11,30 +11,42 @@ import Ratings from "../../components/Product/Rating";
 import ReviewsList from "../../components/Product/ReviewList";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Loading from "../../components/Loading";
+import ErrorPage from "../../components/Error";
 
 const ProductPage = () => {
   const [selectedImage, setSelectedImage] = useState(0);
-  // const {subCategoryName,productId}= useParams();
+  const {subCategoryName,productId}= useParams();
 
-  //   // const { subCategoryName } = useParams(); // Extract subCategoryName from URL
-  //   // console.log(subCategoryName)
-  //   const [product, setProduct] = useState({});
-  //   // const [subcategory, setSubcategory] = useState([])
-  //   const [loading, setLoading] = useState(true);
-  //   const [error, setError] = useState(null);
-  //   // const [category, setCategory] = useState({});
+    // const { subCategoryName } = useParams(); // Extract subCategoryName from URL
+    // console.log(subCategoryName)
+    const [product, setProduct] = useState({});
+    // const [subcategory, setSubcategory] = useState([])
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    // const [category, setCategory] = useState({});
   
-  //   useEffect(() => {
-  //     axios.get(`http://localhost:8085/product/${productId}`).then((res)=>{
-  //       setProduct(res.data)
-  //     }).then(setLoading(false))
-      
+    useEffect(() => {
+      axios.get(`http://localhost:8085/product/${productId}`).then((res)=>{
+        setProduct(res.data)
+        setLoading(false)
+      })
+      .catch((err) => {
+        setError(err.message); // Set error message
+        setLoading(false); // Set loading to false
+        });
     
-  //   }, [subCategoryName]);
+    }, [subCategoryName]);
 
-  //   if (loading) {
-  //       return <h2>Loading {subCategoryName}...</h2>;
-  //   }
+    if (loading) {
+      return (
+        <Loading message={"Loading "}/>
+      );
+    }
+    if (error){
+      return(
+        <ErrorPage message={error}/>);
+    }
 
   // Product data
   const product_test = {
@@ -53,64 +65,64 @@ const ProductPage = () => {
     unavailableSizes: ["US XXL"],
     rating:2.0
   };
-  const product =
-    {
-        "vendorId": "203",
-        "name": "Wireless Earbuds",
-        "brand": "TechSound",
-        "description": "High-quality wireless earbuds with noise cancellation and 12-hour battery life.",
-        "category": {
-            "categoryId": 2,
-            "name": "GADGETS",
-            "bannerImage": "localhost:/12321/imageurl_1"
-        },
-        "subCategory": {
-            "subcategoryId": 2,
-            "name": "EARPHONES",
-            "category": {
-                "categoryId": 2,
-                "name": "GADGETS",
-                "bannerImage": "localhost:/12321/imageurl_1"
-            }
-        },
-        "listOfSpecs": [
-            {
-                "title": "Bluetooth",
-                "body": "Bluetooth 5.2"
-            }
-        ],
-        "price": 450,
-        "quantity": 150,
-        "profileImgUrl": "https://example.com/images/products/earbuds.jpg",
-        "createdAt": null,
-        "updatedAt": null,
-        "available": false,
-        "sizes":["US XS", "US S", "US M", "US L", "US XL", "US XXL"],
-        "unavailableSizes": ["US XXL"],
-        "rating":3,
-  reviews: [
-    {
-      title: "Amazing product!",
-      comment: "This hoodie is super comfortable and fits perfectly.",
-      rating: 5,
-      user: "John Doe",
-    },
-    {
-      title: "Good quality but expensive",
-      comment: "The quality is great, but I feel it's a bit overpriced.",
-      rating: 4,
-      user: "Jane Smith",
-    },
-    {
-      title: "Not satisfied",
-      comment: "The material feels rough and the size runs small.",
-      rating: 2,
-      user: "Sam Wilson",
-    },
-  ]
+  // const product =
+  //   {
+  //       "vendorId": "203",
+  //       "name": "Wireless Earbuds",
+  //       "brand": "TechSound",
+  //       "description": "High-quality wireless earbuds with noise cancellation and 12-hour battery life.",
+  //       "category": {
+  //           "categoryId": 2,
+  //           "name": "GADGETS",
+  //           "bannerImage": "localhost:/12321/imageurl_1"
+  //       },
+  //       "subCategory": {
+  //           "subcategoryId": 2,
+  //           "name": "EARPHONES",
+  //           "category": {
+  //               "categoryId": 2,
+  //               "name": "GADGETS",
+  //               "bannerImage": "localhost:/12321/imageurl_1"
+  //           }
+  //       },
+  //       "listOfSpecs": [
+  //           {
+  //               "title": "Bluetooth",
+  //               "body": "Bluetooth 5.2"
+  //           }
+  //       ],
+  //       "price": 450,
+  //       "quantity": 150,
+  //       "profileImgUrl": "https://example.com/images/products/earbuds.jpg",
+  //       "createdAt": null,
+  //       "updatedAt": null,
+  //       "available": false,
+  //       "sizes":["US XS", "US S", "US M", "US L", "US XL", "US XXL"],
+  //       "unavailableSizes": ["US XXL"],
+  //       "rating":3,
+  // reviews: [
+  //   {
+  //     title: "Amazing product!",
+  //     comment: "This hoodie is super comfortable and fits perfectly.",
+  //     rating: 5,
+  //     user: "John Doe",
+  //   },
+  //   {
+  //     title: "Good quality but expensive",
+  //     comment: "The quality is great, but I feel it's a bit overpriced.",
+  //     rating: 4,
+  //     user: "Jane Smith",
+  //   },
+  //   {
+  //     title: "Not satisfied",
+  //     comment: "The material feels rough and the size runs small.",
+  //     rating: 2,
+  //     user: "Sam Wilson",
+  //   },
+  // ]
 
 
-    }
+  //   }
 
   return (
     <div>

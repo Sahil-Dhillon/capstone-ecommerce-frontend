@@ -100,8 +100,9 @@ const Register = () => {
               </select>
             </div>
             {/* Submit Button */}
-            <button
+            <Link
               type="submit"
+              to='/'
               className="btn w-100"
               style={{
                 backgroundColor: "#44318D",
@@ -110,12 +111,12 @@ const Register = () => {
               }}
             >
               Register
-            </button>
+            </Link>
           </form>
           {/* Link to Login */}
           <p className="text-center mt-3">
             Already a member?{" "}
-            <Link to="/login" style={{ color: "#D83F87", cursor: "pointer" }}>
+            <Link to="/auth/login" style={{ color: "#D83F87", cursor: "pointer" }}>
               Login
             </Link>
           </p>

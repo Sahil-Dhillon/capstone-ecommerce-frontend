@@ -2,6 +2,10 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import CategoriesBar from "../../components/Header/CategoriesBar";
+import { TailSpin } from "react-loader-spinner";
+import Loading from "../../components/Loading";
+import ErrorPage from "../../components/Error";
+
 
 const CategoriesPage = () => {
   // const category = {
@@ -52,7 +56,13 @@ const CategoriesPage = () => {
     }, [categoryName]);
 
     if (loading) {
-        return <h2>Loading {categoryName}...</h2>;
+      return (
+        <Loading message={"Loading "+ categoryName}/>
+      );
+    }
+    if (error){
+      return(
+        <ErrorPage message={error}/>);
     }
 
 

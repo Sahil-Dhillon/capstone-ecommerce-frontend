@@ -2,6 +2,7 @@ import React from 'react';
 import typo_logo from '../../../assets/img/logos/2-removebg-preview.png'
 import small_logo from '../../../assets/img/logos/uw-logo-no-bg-black.png'
 import { Link, useLocation } from "react-router-dom";
+import { IoMdSearch } from "react-icons/io";
 const Navbar = () => {
     const location = useLocation(); // Get current route
   const isHomePage = location.pathname === "/";
@@ -28,17 +29,21 @@ const Navbar = () => {
 
                 {/* Search Bar */}
                 <div className="d-none d-md-block">
-                    <form className="d-flex">
+                    <form className="d-flex align-items-center bg-light pe-2">
                         <input
                             type="text"
                             className="form-control me-2"
                             placeholder="Search for products..."
                         />
-                        <button className="btn btn-outline-secondary" type="submit">
+                        <IoMdSearch size={30} color='black'/>
+                        {/* <button className="btn btn-outline-secondary" type="submit">
                             Search
-                        </button>
+                        </button> */}
                     </form>
                 </div>
+                <Link to="/auth/login" className="btn btn-outline-dark" >
+                            Login
+                </Link>
             </div>
 
             {/* Bottom Bar */}
