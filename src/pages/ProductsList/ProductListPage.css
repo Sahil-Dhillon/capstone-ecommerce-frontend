@@ -6,6 +6,7 @@
     width: 75%;
     height: 100%;
     background: #fff;
+    color:black;
     z-index: 1050;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     overflow-y: auto;

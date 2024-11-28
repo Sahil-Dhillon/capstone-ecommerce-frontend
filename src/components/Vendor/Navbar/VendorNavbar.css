@@ -1,0 +1,25 @@
+/* Navbar Styles */
+.navbar {
+    background-color: #007bff; /* Primary Bootstrap color */
+    position: sticky;
+    top: 0;
+    z-index: 1050;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar-brand {
+    color: #fff !important;
+    font-weight: bold;
+    font-size: 20px;
+  }
+  
+  .navbar .nav-link {
+    color: #fff !important;
+    font-size: 16px;
+    transition: color 0.2s ease;
+  }
+  
+  .navbar .nav-link:hover {
+    color: #d4d4d4 !important; /* Light gray */
+  }
+  

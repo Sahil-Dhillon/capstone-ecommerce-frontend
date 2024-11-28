@@ -1,0 +1,16 @@
+/* Style the cards */
+.card {
+    margin-bottom: 20px;
+  }
+  
+  /* Add spacing to the buttons */
+  button {
+    margin-top: 10px;
+  }
+  
+  /* Ensure that images are responsive */
+  .card-img-top {
+    max-width: 100%;
+    height: auto;
+  }
+  

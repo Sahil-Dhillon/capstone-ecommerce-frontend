@@ -22,13 +22,27 @@ import Product from "./pages/Admin/Product";
 import SubCategory from "./pages/Admin/SubCategory";
 import User from "./pages/Admin/User";
 import AdminLayout from './layout/admin';
+// import Navbar from './components/Vendor/Navbar'
+// import Sidebar from './components/Vendor/VendorSidebar';
+// import Dashboard from './pages/Vendor/VendorDashboard';
+import ProductManagement from './pages/Vendor/ProductManagement';
+import InventoryManagement from './pages/Vendor/InventoryManagement';
+import VendorLayout from './layout/Vendor';
+import UserProfilePage from './pages/UserProfile/UserProfilePage';
+import AddressCard from './pages/UserProfile/AddressCard';
+import UserProfileCard from './pages/UserProfile/UserProfileCard';
+import AddressDetailsModal from './pages/UserProfile/AddressDetailsModal';
+import OrderSuccessPage from './pages/OrderSuccessPage';
+import WishlistPage from './pages/WishlistPage';
+
+
 function App() {
   return (
     <Router>
       {/* <Navbar /> */}
       {/* <CustomCursor/> */}
       <Routes>
-      <Route
+        <Route
           path="/auth/*"
           element={
             <AuthLayout>
@@ -45,21 +59,23 @@ function App() {
             <MainLayout>
               <Routes>
                 <Route path="" element={<Home />} />
-                <Route path="/category/:categoryName" element={<CategoriesPage/>}/>
-                <Route path="/products/:subCategoryName" element={<ProductListPage/>}/>
+                <Route path="/category/:categoryName" element={<CategoriesPage />} />
+                <Route path="/products/:subCategoryName" element={<ProductListPage />} />
 
-                <Route path="/products" element={<ProductListPage/>}/>
-                <Route path="/product/:productId" element={<ProductPage/>}/>
-                <Route path='/cart' element={<CartPage/>}/>
+                <Route path="/products" element={<ProductListPage />} />
+                <Route path="/product/:productId" element={<ProductPage />} />
+                <Route path='/cart' element={<CartPage />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
-              
-        
-      </Routes>
+                <Route path="/UserProfilePage" element={<UserProfilePage/>} />
+                <Route path="/OrderSuccessPage" element={<OrderSuccessPage/>} />
+                <Route path="/WishlistPage" element={<WishlistPage/>} />
+
+              </Routes>
             </MainLayout>
           }
         />
-          <Route
+        <Route
           path="/admin/*"
           element={
             <AdminLayout>
@@ -70,20 +86,28 @@ function App() {
                 <Route path="/products" element={<Product />} />
                 <Route path="/subcategories" element={<SubCategory />} />
                 <Route path="/users" element={<User />} />
-                </Routes>
+              </Routes>
 
             </AdminLayout>
-            
-            
+
+
           }
-          />
-            
-          
-        {/* <Route path="/" element={<Home />} /> */}
-        {/* <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} /> */}
-        {/* <Route path="/about" element={<About />} /> */}
-        {/* <Route path="/contact" element={<Contact />} /> */}
+        />
+        <Route
+          path="/vendor/*"
+          element={
+            <VendorLayout>
+              <Routes>
+                {/* <Route path="" element={<Dashboard />} /> */}
+                {/* <Route path="" element={<VendorDashboard />} /> */}
+                <Route path="/products" element={<ProductManagement />} />
+                <Route path="/inventory" element={<InventoryManagement />} />
+              </Routes>
+            </VendorLayout>
+
+          }
+        />
+
       </Routes>
     </Router>
   );

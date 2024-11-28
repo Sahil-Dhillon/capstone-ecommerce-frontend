@@ -10,7 +10,7 @@ const CartPage = () => {
     {
       id: 1,
       name: "Air Jordan XXXIX PF 'Sol'",
-      image: "https://via.placeholder.com/100",
+      image: "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/7cc01e4d-9019-43b5-8cf1-6d7d99899a96/AIR+JORDAN+XXXIX+PF.png",
       price: 18395,
       size: "8.5",
       color: "White/Black/University Red",
@@ -19,7 +19,7 @@ const CartPage = () => {
     {
       id: 2,
       name: "Jordan Sport Hoop Fleece",
-      image: "https://via.placeholder.com/100",
+      image: "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/80dbc255-6af8-447a-a5d6-8ce1c9584652/M+J+DF+SPRT+HOOP+FLC+PANT.png",
       price: 5695,
       size: "M",
       color: "Black/Dark Shadow",
