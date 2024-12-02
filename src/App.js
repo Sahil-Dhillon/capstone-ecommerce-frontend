@@ -4,7 +4,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
-import Contact from './pages/Contact';
+// import Contact from './pages/Contact';
 import Navbar from './components/Header/Navbar';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
@@ -33,9 +33,16 @@ import AddressCard from './pages/UserProfile/AddressCard';
 import UserProfileCard from './pages/UserProfile/UserProfileCard';
 import AddressDetailsModal from './pages/UserProfile/AddressDetailsModal';
 import OrderSuccessPage from './pages/OrderSuccessPage';
-// import WishlistPage from './pages/WishlistPage';
+import WishlistPage from './pages/WishlistPage';
 import Checkout from './pages/Checkout';
 import Wishlist from './pages/WishlistPage';
+import ContactUs from './pages/Contact';
+import FAQPage from './pages/FAQ';
+import PricingPolicy from './pages/PricingPolicy';
+import FeaturesPage from './pages/Features';
+import BlogPage from './pages/Blog';
+
+
 
 
 function App() {
@@ -68,11 +75,16 @@ function App() {
                 <Route path="/product/:productId" element={<ProductPage />} />
                 <Route path='/cart' element={<CartPage />} />
                 <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
+                <Route path="/Contact" element={<ContactUs />} />
                 <Route path="/UserProfile" element={<UserProfilePage/>} />
                 <Route path="/OrderSuccess" element={<OrderSuccessPage/>} />
                 <Route path="/Wishlist" element={<Wishlist/>} />
                 <Route path="/Checkout" element={<Checkout/>} />
+                <Route path="/FAQ" element={<FAQPage/>} />
+                <Route path="/PricingPolicy" element={<PricingPolicy/>} />
+                <Route path="/Features" element={<FeaturesPage/>} />
+                <Route path="/Blog" element={<BlogPage/>} />
+              
 
               </Routes>
             </MainLayout>
