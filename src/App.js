@@ -33,7 +33,9 @@ import AddressCard from './pages/UserProfile/AddressCard';
 import UserProfileCard from './pages/UserProfile/UserProfileCard';
 import AddressDetailsModal from './pages/UserProfile/AddressDetailsModal';
 import OrderSuccessPage from './pages/OrderSuccessPage';
-import WishlistPage from './pages/WishlistPage';
+// import WishlistPage from './pages/WishlistPage';
+import Checkout from './pages/Checkout';
+import Wishlist from './pages/WishlistPage';
 
 
 function App() {
@@ -67,9 +69,10 @@ function App() {
                 <Route path='/cart' element={<CartPage />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
-                <Route path="/UserProfilePage" element={<UserProfilePage/>} />
-                <Route path="/OrderSuccessPage" element={<OrderSuccessPage/>} />
-                <Route path="/WishlistPage" element={<WishlistPage/>} />
+                <Route path="/UserProfile" element={<UserProfilePage/>} />
+                <Route path="/OrderSuccess" element={<OrderSuccessPage/>} />
+                <Route path="/Wishlist" element={<Wishlist/>} />
+                <Route path="/Checkout" element={<Checkout/>} />
 
               </Routes>
             </MainLayout>

@@ -877,7 +877,7 @@
 
 
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Sidebar from "../../components/Products/SideBar";
 import ProductCard from "../../components/Products/ProductCard";
 import './ProductListPage.css';
@@ -889,150 +889,28 @@ import ErrorPage from "../../components/Error";
 
 const ProductListPage = () => {
   const [showSidebar, setShowSidebar] = useState(false);
-  const { subCategoryName } = useParams(); // Extract subCategoryName from URL
-  const [products, setProducts] = useState([
-    {
-        "productId": 9,
-        "vendorId": "203",
-        "name": "Wireless Earbuds",
-        "brand": "TechSound",
-        "description": "High-quality wireless earbuds with noise cancellation and 12-hour battery life.",
-        "tags": null,
-        "variations": [
-            "Medium",
-            "Small",
-            "Large"
-        ],
-        "category": {
-            "categoryId": 2,
-            "name": "Electronics",
-            "bannerImage": "https://example.com/images/banners/electronics.jpg"
-        },
-        "subCategory": {
-            "subcategoryId": 20,
-            "name": "Audio Devices",
-            "category": {
-                "categoryId": 2,
-                "name": "Electronics",
-                "bannerImage": "https://example.com/images/banners/electronics.jpg"
-            }
-        },
-        "listOfSpecs": [
-            {
-                "title": "Bluetooth",
-                "body": "Bluetooth 5.2"
-            }
-        ],
-        "listOfReviews": [],
-        "listOfImages": [],
-        "price": 450,
-        "quantity": 150,
-        "profileImgUrl": "https://example.com/images/products/earbuds.jpg",
-        "createdAt": null,
-        "updatedAt": null,
-        "available": true
-    },
-    {
-        "productId": 10,
-        "vendorId": "204",
-        "name": "Over-Ear Wireless Headphones",
-        "brand": "SoundMax",
-        "description": "Comfortable over-ear wireless headphones with noise cancellation and 20-hour battery life.",
-        "tags": null,
-        "variations": [
-            "Black",
-            "Blue",
-            "Red"
-        ],
-        "category": {
-            "categoryId": 1,
-            "name": "Clothing",
-            "bannerImage": "https://static.vecteezy.com/system/resources/previews/008/174/590/non_2x/fashion-advertising-web-banner-illustration-vector.jpg"
-        },
-        "subCategory": {
-            "subcategoryId": 2,
-            "name": "Women",
-            "category": {
-                "categoryId": 1,
-                "name": "Clothing",
-                "bannerImage": "https://static.vecteezy.com/system/resources/previews/008/174/590/non_2x/fashion-advertising-web-banner-illustration-vector.jpg"
-            }
-        },
-        "listOfSpecs": [
-            {
-                "title": "Noise Cancellation",
-                "body": "Active Noise Cancellation up to 50dB"
-            }
-        ],
-        "listOfReviews": [],
-        "listOfImages": [],
-        "price": 550,
-        "quantity": 120,
-        "profileImgUrl": "https://example.com/images/products/headphones.jpg",
-        "createdAt": null,
-        "updatedAt": null,
-        "available": true
-    },
-    {
-        "productId": 11,
-        "vendorId": "207",
-        "name": "Sports Wireless Earbuds",
-        "brand": "FitAudio",
-        "description": "Lightweight and comfortable sports wireless earbuds with water resistance and 8-hour battery life.",
-        "tags": null,
-        "variations": [
-            "Black",
-            "Green",
-            "Blue"
-        ],
-        "category": {
-            "categoryId": 2,
-            "name": "Electronics",
-            "bannerImage": "https://example.com/images/banners/electronics.jpg"
-        },
-        "subCategory": {
-            "subcategoryId": 20,
-            "name": "Audio Devices",
-            "category": {
-                "categoryId": 2,
-                "name": "Electronics",
-                "bannerImage": "https://example.com/images/banners/electronics.jpg"
-            }
-        },
-        "listOfSpecs": [
-            {
-                "title": "Battery life",
-                "body": "12-hour battery life"
-            }
-        ],
-        "listOfReviews": [],
-        "listOfImages": [],
-        "price": 120,
-        "quantity": 300,
-        "profileImgUrl": "https://example.com/images/products/sports-earbuds.jpg",
-        "createdAt": null,
-        "updatedAt": null,
-        "available": true
-    }
-  ]);
+  const { subCategoryName } = useParams();
+  const [products, setProducts] = useState([]);
   const [subcategory, setSubcategory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [category, setCategory] = useState({});
-  
-  // Pagination States
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [sortBy, setSortBy] = useState("price");
   const [currentPage, setCurrentPage] = useState(1); // Track current page
-  const [totalPages, setTotalPages] = useState(3); // Total number of pages
-  const [pageSize] = useState(2); // Define how many products per page
+  // const [totalPages, setTotalPages] = useState(3); // Total number of pages
+  const [pageSize] = useState(4); // Define how many products per page
+ 
 
   useEffect(() => {
     setLoading(true); // Set loading to true before making API call
-    axios.get(`http://localhost:8085/subcategory/name/${subCategoryName}`).then((res) => {
+    axios.get(`/subcategory/name/${subCategoryName}`).then((res) => {
       setSubcategory(res.data);
-      axios.get(`http://localhost:8085/product/findBySubCategory/${res.data.subcategoryId}?page=${currentPage}&pageSize=${pageSize}`).then((products_res) => {
-        setProducts(products_res.data.content); // Assuming `content` contains the products for the page
-        setTotalPages(products_res.data.totalPages); // Set the total pages from response
+      axios.get(`/product/findBySubCategory/${res.data.subcategoryId}?pageNumber=${currentPage-1}&pageSize=${pageSize}&sortBy=${sortBy}&sort=${sortOrder}`).then((products_res) => {
+        setProducts(products_res.data); // Assuming `content` contains the products for the page
+        // setTotalPages(products_res.data.totalPages); // Set the total pages from response
         setLoading(false); // Set loading to false after fetching data
+        console.log(products_res)
       });
     }).catch((err) => {
       setError(err.message); // Set error message if there is an error
@@ -1044,16 +922,18 @@ const ProductListPage = () => {
     return <Loading message={"Loading " + subCategoryName} />;
   }
 
-  // if (error) {
-  //   return <ErrorPage message={error} />;
-  // }
+  if (error) {
+    return <ErrorPage message={error} />;
+  }
+
+  
 
   // Toggle Sidebar Visibility
   const toggleSidebar = () => setShowSidebar(!showSidebar);
 
   // Function to handle page changes
   const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) {
+    if (page >= 0 ) {
       setCurrentPage(page); // Set current page when user clicks on pagination buttons
     }
   };
@@ -1091,7 +971,10 @@ const ProductListPage = () => {
           <div className="col">
             <div className="product-grid">
               {products.map((product) => (
-                <ProductCard product={product} key={product.productId} />
+                <ProductCard product={product}
+                key={product.productId}
+                />
+                
               ))}
             </div>
           </div>
@@ -1108,11 +991,11 @@ const ProductListPage = () => {
             Previous
           </button>
           <span className="mx-3" style={{ fontSize: '16px' }}>
-            Page {currentPage} of {totalPages}
+            Page {currentPage}
           </span>
           <button
             className="btn btn-outline-secondary"
-            disabled={currentPage === totalPages}
+            disabled={products.length < pageSize}
             onClick={() => handlePageChange(currentPage + 1)}
             style={{ margin: '0 10px' }}
           >

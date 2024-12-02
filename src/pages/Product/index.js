@@ -17,7 +17,6 @@ import ErrorPage from "../../components/Error";
 const ProductPage = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const {subCategoryName,productId}= useParams();
-
     // const { subCategoryName } = useParams(); // Extract subCategoryName from URL
     // console.log(subCategoryName)
     const [product, setProduct] = useState({});
@@ -27,7 +26,7 @@ const ProductPage = () => {
     // const [category, setCategory] = useState({});
   
     useEffect(() => {
-      axios.get(`http://localhost:8085/product/${productId}`).then((res)=>{
+      axios.get(`/product/${productId}`).then((res)=>{
         setProduct(res.data)
         setLoading(false)
       })
@@ -54,7 +53,7 @@ const ProductPage = () => {
     description: "Men's Dri-FIT Full-Zip Hoodie",
     price: "₹ 5,695.00",
     inclusive: "Inclusive of all taxes (Also includes all applicable duties)",
-    sizes: ["US XS", "US S", "US M", "US L", "US XL", "US XXL"],
+    variations: ["US XS", "US S", "US M", "US L", "US XL", "US XXL"],
     images: [
       "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/3b686bd6-0f0e-4208-831d-d25571d7ceb3/M+J+DF+SPRT+HOOP+FLC+FZ.png",
       "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/cbdc9fb8-b8ef-40c0-8a08-61904695ffbf/M+J+DF+SPRT+HOOP+FLC+FZ.png",
@@ -120,8 +119,6 @@ const ProductPage = () => {
   //     user: "Sam Wilson",
   //   },
   // ]
-
-
   //   }
 
   return (
@@ -148,10 +145,10 @@ const ProductPage = () => {
         <ProductBelowDetails product={product} />
     </div>
     <ProductCarousel title="YOU MIGHT ALSO LIKE" autoScroll={false}/>
-    <div className="m-5">
+    {/* <div className="m-5">
         <Ratings product={product} />
         
-      </div>
+      </div> */}
     </div>
   );
 };

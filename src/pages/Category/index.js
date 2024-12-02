@@ -39,11 +39,14 @@ const CategoriesPage = () => {
     const [category, setCategory] = useState({});
 
     useEffect(() => {
-      axios.get(`http://localhost:8085/category/${categoryName}`)
+      axios.get(`/category/${categoryName}`)
       .then((response) => {
-        axios.get(`http://localhost:8085/subcategory/byCategoryName/${categoryName}`).then((subCategoryResponse)=>{
+        axios.get(`/subcategory/byCategoryName/${categoryName}`).then((subCategoryResponse)=>{
           setSubcategories(subCategoryResponse.data)
           console.log(subCategoryResponse.data)
+          axios.get(`/product/bySubCategory/1?pageSize=3`).then((productsResponse)=>{
+            setProducts(productsResponse.data)
+          })
         })
       setCategory(response.data); // Set categories data
       console.log(response.data)
@@ -78,9 +81,11 @@ const CategoriesPage = () => {
       <div style={{ padding: "20px", background: "#f9f9f9", borderRadius: "5px" }}>
         {subcategories.map((subcategory) => (
           <div key={subcategory.name} style={{ marginBottom: "40px" }}>
-             <Link to={`/products/${subcategory.name}`} style={{ marginBottom: "10px", color: "#333",fontSize:'1.2rem',textDecoration:'none' }}>{subcategory.name}</Link>
-            {/*<div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
-              {subcategory.products.map((product) => (
+             <Link to={`/products/${subcategory.name}`} className="d-flex justify-content-between align-items-center" style={{ marginBottom: "10px", color: "#333",fontSize:'1.2rem',textDecoration:'none' }}>{subcategory.name}
+             <button className="btn btn-dark m-2 ">Explore More...</button>
+             </Link>
+            <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+              {products.map((product) => (
                 <div
                 key={product.id}
                   style={{
@@ -114,7 +119,7 @@ const CategoriesPage = () => {
                   />
                   <h3 style={{ fontSize: "18px", color: "#333", margin: "10px 0" }}>{product.name}</h3>
                   <p style={{ color: "#007bff", fontWeight: "bold", fontSize: "16px" }}>{product.price}</p>
-                  <button
+                  <Link to={`/product/${product.productId}`}
                   style={{
                     padding: "10px 15px",
                     background: "#007bff",
@@ -125,10 +130,11 @@ const CategoriesPage = () => {
                     }}
                   >
                   Buy Now
-                  </button>
+                  </Link>
                   </div>
                   ))}
-                  </div> */}
+                  </div>
+                  
           </div>
         ))}
       </div>

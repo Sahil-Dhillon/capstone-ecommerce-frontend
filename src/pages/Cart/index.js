@@ -1,49 +1,99 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 // import CartItem from "./CartIte";
 // import CartSummary from "./CartSummary";
 import CartItem from "../../components/Cart/CartItems";
 import './Cart.css'
 import CartSummary from "../../components/Cart/CartSummary";
+import { AppContext } from "../../context/AppContext";
+import axios from "axios";
 
 const CartPage = () => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Air Jordan XXXIX PF 'Sol'",
-      image: "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/7cc01e4d-9019-43b5-8cf1-6d7d99899a96/AIR+JORDAN+XXXIX+PF.png",
-      price: 18395,
-      size: "8.5",
-      color: "White/Black/University Red",
-      quantity: 1,
-    },
-    {
-      id: 2,
-      name: "Jordan Sport Hoop Fleece",
-      image: "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/80dbc255-6af8-447a-a5d6-8ce1c9584652/M+J+DF+SPRT+HOOP+FLC+PANT.png",
-      price: 5695,
-      size: "M",
-      color: "Black/Dark Shadow",
-      quantity: 1,
-    },
-  ]);
+  const { cart, authToken, setCart, userData, updateUserData } = useContext(AppContext);
+  const [cartItems, setCartItems] = useState([]);
 
-  const handleQuantityChange = (id, newQuantity) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
+  let products = []
+  useEffect(() => {
+    // updateUserData()
+    if (userData) {
+      setCartItems(userData.userCart.listOfCartItems)
+      // userData.userCart.listOfCartItems.map((x,index)=>{
+      //   axios.get(`/product/${x.productId}`).then((res)=>{
+      //     products.push({...res.data,id:index, quantity:x.quantity,variations:x.variations})
+      //     setCartItems(products)
+      //   }).finally(()=>{
+
+      //     console.log(products)
+      //   })
+      // })
+
+    }
+    // console.log(products)
+  }, [userData])
+
+  useEffect(() => {
+    updateUserData()
+  }, [])
+  // useEffect(()=>{
+  //   setCart(cartItems)
+
+  // },[cartItems])
+
+  const handleQuantityChange = (item) => {
+    // setCartItems((prevItems) =>
+    //   prevItems.map((item, index) => {
+    //     item.id = index;
+    //     // if (item.id === id){
+    //     //   axios.put("/cartitem/updateitem?cartid=1",{
+    //     //     "cartItemId": 1,
+    //     //     "productId": 1,
+    //     //     "quantity": 77,
+    //     //     "variations": "Gray"
+    //     // })
+    //     // }
+    //     return item.id === id ? { ...item, quantity: newQuantity } : item
+    //   })
+    // );
+    if (userData) {
+      axios.put(`/cartitem/updateitem`,{
+        "cartItemId": item.id,
+    "productId": item.productId,
+    "quantity": item.quantity,
+    "variations": item.variations
+      }, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        }
+      }
+      ).then((res) => {
+        console.log(res)
+        updateUserData()
+      })
+    }
+
   };
 
   const handleRemoveItem = (id) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+    // setCartItems((prevItems) => prevItems.filter((item,index) => {
+    //   item.id = index
+    //   return item.id !== id}));
+    if (userData) {
+      axios.delete(`/cartitem/deleteitem?cartItemId=${id}`, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        }
+      }
+      ).then((res) => {
+        console.log(res)
+        updateUserData()
+      })
+    }
   };
 
   const subtotal = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
-  const deliveryCharge = 1250;
+  const deliveryCharge = subtotal > 0 ? 49 : 0;
   const total = subtotal + deliveryCharge;
 
   return (
@@ -52,14 +102,17 @@ const CartPage = () => {
       <div className="row">
         {/* Cart Items */}
         <div className="col-lg-8">
-          {cartItems.map((item) => (
-            <CartItem
-              key={item.id}
-              item={item}
-              onQuantityChange={handleQuantityChange}
-              onRemove={handleRemoveItem}
-            />
-          ))}
+          {cartItems.map((item, index) => {
+            item.id = item.cartItemId
+            console.log(index)
+            return (
+              <CartItem
+                key={item.id}
+                item={item}
+                onQuantityChange={handleQuantityChange}
+                onRemove={handleRemoveItem}
+              />);
+          })}
           {cartItems.length === 0 && (
             <p className="text-muted text-center">Your bag is empty.</p>
           )}
@@ -78,3 +131,88 @@ const CartPage = () => {
 };
 
 export default CartPage;
+
+
+// const CartPage = ({ cart }) => {
+//   const [cartItems, setCartItems] = useState(cart);
+
+//   const handleQuantityChange = (id, newQuantity) => {
+//     setCartItems((prevItems) =>
+//       prevItems.map((item) =>
+//         item.id === id ? { ...item, quantity: newQuantity } : item
+//       )
+//     );
+//   };
+
+//   const handleAddToCart = (item) => {
+//     setCartItems((prevItems) => {
+//       const existingItem = prevItems.find((cartItem) => cartItem.id === item.id);
+//       if (existingItem) {
+//         return prevItems.map((cartItem) =>
+//           cartItem.id === item.id
+//             ? { ...cartItem, quantity: cartItem.quantity + 1 }
+//             : cartItem
+//         );
+//       } else {
+//         return [...prevItems, { ...item, quantity: 1 }];
+//       }
+//     });
+//   };
+
+//   const handleDecreaseQuantity = (id) => {
+//     setCartItems((prevItems) =>
+//       prevItems
+//         .map((item) =>
+//           item.id === id
+//             ? { ...item, quantity: item.quantity > 1 ? item.quantity - 1 : 0 }
+//             : item
+//         )
+//         .filter((item) => item.quantity > 0) // Remove item if quantity is 0
+//     );
+//   };
+
+//   const handleRemoveItem = (id) => {
+//     setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+//   };
+
+//   const subtotal = cartItems.reduce(
+//     (total, item) => total + item.price * item.quantity,
+//     0
+//   );
+//   const deliveryCharge = 1250;
+//   const total = subtotal + deliveryCharge;
+
+//   return (
+//     <div className="cart-page container py-5">
+//       <h2 className="mb-4">Bag</h2>
+//       <div className="row">
+//         {/* Cart Items */}
+//         <div className="col-lg-8">
+//           {cartItems.map((item) => (
+//             <CartItem
+//               key={item.productId}
+//               item={item}
+//               onAdd={() => handleAddToCart(item)} // Pass Add function
+//               // onDecrease={() => handleDecreaseQuantity(item.productId)} // Pass Decrease function
+//               onQuantityChange={handleQuantityChange} // Optional
+//               onRemove={() => handleRemoveItem(item.productId)} // Pass Remove function
+//             />
+//           ))}
+//           {cartItems.length === 0 && (
+//             <p className="text-muted text-center">Your bag is empty.</p>
+//           )}
+//         </div>
+//         {/* Summary */}
+//         <div className="col-lg-4">
+//           <CartSummary
+//             subtotal={subtotal}
+//             deliveryCharge={deliveryCharge}
+//             total={total}
+//           />
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default CartPage;
