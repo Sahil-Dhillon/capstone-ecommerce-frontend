@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-const CartSummary = ({ subtotal, deliveryCharge, total }) => {
+const CartSummary = ({ subtotal, deliveryCharge, total,setOrder,cartItems }) => {
   const [couponCode, setCouponCode] = useState(""); // State for the coupon code
   const [discount, setDiscount] = useState(0); // State for the discount value
   const [errorMessage, setErrorMessage] = useState(""); // State for error messages
   const [showModal, setShowModal] = useState(false); // State for modal visibility
-
+  const navigate = useNavigate();
   // Example coupon codes with discount type and minimum total requirements
   const validCoupons = {
     SAVE10: { discount: 10, type: "percentage", minTotal: 1000 }, // 10% discount with ₹1000 minimum
@@ -73,6 +73,23 @@ const CartSummary = ({ subtotal, deliveryCharge, total }) => {
 
   const finalTotal = total - discount;
 
+  const submitOrder = ()=>{
+    setOrder({
+      "coupon": couponCode,
+  "orderStatus": "Pending",
+  "totalAmount": finalTotal,
+  "subtotal":subtotal,
+  "shipping":deliveryCharge,
+  "discount":discount,
+  "listOfOrderItems": [
+    ...cartItems
+  ],
+    })
+
+    navigate('/Checkout')
+
+  }
+
   return (
     <>
       {/* Summary Section */}
@@ -125,7 +142,7 @@ const CartSummary = ({ subtotal, deliveryCharge, total }) => {
             Apply Coupon
           </button>
         )}
-        <Link to="/Checkout" className="btn btn-dark w-100 mt-3">Checkout</Link>
+        <Button onClick={()=> submitOrder()} className="btn btn-dark w-100 mt-3">Checkout</Button>
       </div>
 
       {/* Coupon Modal */}

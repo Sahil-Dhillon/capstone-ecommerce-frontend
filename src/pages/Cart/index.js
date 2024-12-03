@@ -8,7 +8,7 @@ import { AppContext } from "../../context/AppContext";
 import axios from "axios";
 
 const CartPage = () => {
-  const { cart, authToken, setCart, userData, updateUserData } = useContext(AppContext);
+  const { setOrder, authToken, setCart, userData, updateUserData } = useContext(AppContext);
   const [cartItems, setCartItems] = useState([]);
 
   let products = []
@@ -120,9 +120,11 @@ const CartPage = () => {
         {/* Summary */}
         <div className="col-lg-4">
           <CartSummary
+            cartItems = {cartItems}
             subtotal={subtotal}
             deliveryCharge={deliveryCharge}
             total={total}
+            setOrder={setOrder}
           />
         </div>
       </div>

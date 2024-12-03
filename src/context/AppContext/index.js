@@ -11,6 +11,7 @@ const AppProvider = ({ children }) => {
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [authToken,setAuthToken] = useState("");
+    const[order,setOrder] = useState({})
 
     const updateUserData = async () => {
         setAuthToken(localStorage.getItem('authToken'));
@@ -88,7 +89,7 @@ const AppProvider = ({ children }) => {
     };
 
     return (
-        <AppContext.Provider value={{ userData,authToken, loading, updateUserData,cart,setCart, addToCart, removeFromCart, clearCart }}>
+        <AppContext.Provider value={{ userData,authToken, loading, updateUserData,cart,setCart, addToCart, removeFromCart, clearCart,order,setOrder }}>
 
             {!loading && children}
         </AppContext.Provider>

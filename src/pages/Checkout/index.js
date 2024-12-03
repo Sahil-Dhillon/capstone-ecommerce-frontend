@@ -1,62 +1,56 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FaShoppingCart, FaCreditCard, FaPaypal, FaMoneyBillAlt, FaPlus } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { AppContext } from '../../context/AppContext';
+import axios from 'axios';
 
 const Checkout = () => {
     const [selectedPayment, setSelectedPayment] = useState('');
-    const [selectedAddress, setSelectedAddress] = useState('');
+    const [selectedAddress, setSelectedAddress] = useState(0);
     const [orderPlaced, setOrderPlaced] = useState(false);
+    const { order, setOrder, authToken, setCart, userData, updateUserData } = useContext(AppContext);
+    const orderDetails = order
+    const navigate = useNavigate()
+    useEffect(() => { console.log(order) }, [])
 
-    const orderDetails = {
-        items: [
-            { name: 'Wireless Headphones', quantity: 1, price: 49.99 },
-            { name: 'Bluetooth Speaker', quantity: 1, price: 29.99 },
-        ],
-        subtotal: 79.98,
-        shipping: 5.99,
-        total: 85.97,
-    };
-
-    const addresses = [
-        {
-            id: 1,
-            name: 'John Doe',
-            phone: '123-456-7890',
-            addressLine: '123 Main Street',
-            city: 'Springfield',
-            state: 'IL',
-            country: 'USA',
-            pincode: '62701',
-        },
-        {
-            id: 2,
-            name: 'Jane Smith',
-            phone: '987-654-3210',
-            addressLine: '456 Oak Avenue',
-            city: 'Austin',
-            state: 'TX',
-            country: 'USA',
-            pincode: '73301',
-        },
-        {
-            id: 3,
-            name: 'Alice Brown',
-            phone: '555-666-7777',
-            addressLine: '789 Pine Lane',
-            city: 'Seattle',
-            state: 'WA',
-            country: 'USA',
-            pincode: '98101',
-        },
-    ];
 
     const handlePaymentSelection = (paymentMethod) => {
         setSelectedPayment(paymentMethod);
     };
 
     const handlePlaceOrder = () => {
-        if (selectedPayment && selectedAddress) {
-            setOrderPlaced(true);
+
+        if (selectedPayment ) {
+            var d = new Date();
+
+            setOrder({
+                ...order,
+                orderStatus: "Completed",
+                payment: {
+                    "paymentMethod": selectedPayment,
+                    "totalAmount": order.totalAmount,
+                    "createdAt": d.toLocaleString(),
+                    "status": "Completed"
+                }
+            })
+            axios.post('/order/placeorder',{
+                ...order,
+                orderStatus: "Completed",
+                payment: {
+                    "paymentMethod": selectedPayment,
+                    "totalAmount": order.totalAmount,
+                    // "createdAt": "",
+                    "status": "Completed"
+                }
+            },{
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                }
+            }).then((x)=>{
+                setOrderPlaced(true);
+                navigate("/OrderSuccess")
+            })
+        
         } else {
             alert('Please select both a payment method and a delivery address!');
         }
@@ -77,6 +71,7 @@ const Checkout = () => {
     }
 
     return (
+
         <div className="container mt-5">
             <h2 className="text-center mb-4">
                 <FaShoppingCart /> Checkout
@@ -87,32 +82,37 @@ const Checkout = () => {
                     <div className="card">
                         <div className="card-body">
                             <h4>Order Details</h4>
-                            <ul className="list-group">
-                                {orderDetails.items.map((item, index) => (
-                                    <li key={index} className="list-group-item d-flex justify-content-between">
-                                        <span>{item.name} (x{item.quantity})</span>
-                                        <span>${item.price.toFixed(2)}</span>
-                                    </li>
-                                ))}
-                            </ul>
+                            {order &&
+                                <ul className="list-group">
+                                    {orderDetails.listOfOrderItems.map((item, index) => (
+                                        <li key={index} className="list-group-item d-flex justify-content-between">
+                                            <span>{item.name} (x{item.quantity})</span>
+                                            <span>₹{item.price.toFixed(2)}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            }
                             <hr />
                             <div className="d-flex justify-content-between">
                                 <strong>Subtotal:</strong>
-                                <span>${orderDetails.subtotal.toFixed(2)}</span>
+                                <span>₹{orderDetails.subtotal.toFixed(2)}</span>
                             </div>
                             <div className="d-flex justify-content-between">
                                 <strong>Shipping:</strong>
-                                <span>${orderDetails.shipping.toFixed(2)}</span>
+                                <span>₹{orderDetails.shipping.toFixed(2)}</span>
+                            </div>
+                            <div className="d-flex justify-content-between ">
+                                <strong>Discount Applied:</strong>
+                                <span className='text-success'>-₹{orderDetails.discount.toFixed(2)}</span>
                             </div>
                             <hr />
                             <div className="d-flex justify-content-between">
                                 <strong>Total:</strong>
-                                <span>${orderDetails.total.toFixed(2)}</span>
+                                <span>₹{orderDetails.totalAmount.toFixed(2)}</span>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 {/* Address and Payment Options */}
                 <div className="col-md-6">
                     {/* Address Selection */}
@@ -131,35 +131,40 @@ const Checkout = () => {
                                 className="list-group overflow-auto"
                                 style={{ maxHeight: '200px', whiteSpace: 'nowrap', overflowX: 'auto' }}
                             >
-                                {addresses.map((address) => (
-                                    <div
-                                        key={address.id}
-                                        className={`position-relative list-group-item list-group-item-action p-3 ${selectedAddress === address.id ? 'active' : ''}`}
-                                        onClick={() => setSelectedAddress(address.id)}
-                                    >
-                                        {/* Label */}
+                                {userData && userData.listOfUserAdresses.map((address, index) => {
+                                    address.id = index
+                                    return (
+
                                         <div
-                                            className="position-absolute"
-                                            style={{
-                                                top: '5px',
-                                                right: '5px',
-                                                border: '1px solid #ccc',
-                                                borderRadius: '5px',
-                                                padding: '2px 6px',
-                                                fontSize: '12px',
-                                                // backgroundColor: 'white',
-                                            }}
+                                            key={address.id}
+                                            className={`position-relative list-group-item list-group-item-action p-3 ${selectedAddress === address.id ? 'active' : ''}`}
+                                            onClick={() => setSelectedAddress(address.id)}
                                         >
-                                            Address {address.id}
+                                            {/* Label */}
+                                            <div
+                                                className="position-absolute"
+                                                style={{
+                                                    top: '5px',
+                                                    right: '5px',
+                                                    border: '1px solid #ccc',
+                                                    borderRadius: '5px',
+                                                    padding: '2px 6px',
+                                                    fontSize: '12px',
+                                                    // backgroundColor: 'white',
+                                                }}
+                                            >
+                                                {address.label}
+                                            </div>
+                                            {/* Address Content */}
+                                            <div>
+                                                <strong>{address.recepientName}</strong> <br />
+                                                Phone: {address.addressMobile} <br />
+                                                {address.addressLine1}<br />
+                                                {address.addressLine2}, {address.city}, {address.state}, {address.country} - {address.pincode}
+                                            </div>
                                         </div>
-                                        {/* Address Content */}
-                                        <div>
-                                            <strong>{address.name}</strong> <br />
-                                            Phone: {address.phone} <br />
-                                            {address.addressLine}, {address.city}, {address.state}, {address.country} - {address.pincode}
-                                        </div>
-                                    </div>
-                                ))}
+                                    )
+                                })}
                             </div>
                         </div>
                     </div>
@@ -188,13 +193,13 @@ const Checkout = () => {
                                     <FaMoneyBillAlt className="me-2" /> Cash on Delivery
                                 </button>
                             </div>
-                            <Link
-                                to="/OrderSuccess"
+                            <button
+                                
                                 className="btn btn-success mt-4 w-100"
                                 onClick={handlePlaceOrder}
                             >
                                 Place Order
-                            </Link>
+                            </button>
                         </div>
                     </div>
                 </div>

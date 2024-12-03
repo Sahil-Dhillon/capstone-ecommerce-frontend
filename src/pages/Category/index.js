@@ -46,11 +46,11 @@ const CategoriesPage = () => {
           console.log(subCategoryResponse.data)
           axios.get(`/product/bySubCategory/1?pageSize=3`).then((productsResponse)=>{
             setProducts(productsResponse.data)
-          })
-        })
-      setCategory(response.data); // Set categories data
+            setCategory(response.data); // Set categories data
       console.log(response.data)
       setLoading(false); // Set loading to false
+          })
+        })
       })
       .catch((err) => {
       setError(err.message); // Set error message
@@ -108,11 +108,11 @@ const CategoriesPage = () => {
                       }}
                       >
                       <img
-                      src={product.image}
+                      src={product.profileImgUrl}
                       alt={product.name}
                       style={{
-                        maxWidth: "100%",
-                        height: "auto",
+                        width: "auto",
+                        height: "100px",
                         borderRadius: "10px",
                         marginBottom: "10px",
                     }}
