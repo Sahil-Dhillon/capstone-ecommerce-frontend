@@ -34,10 +34,10 @@ const Order = () => {
   };
 
   // Function to delete an order
-  const handleDelete = (id) => {
-    const updatedOrders = orders.filter((order) => order.id !== id);
-    setOrders(updatedOrders);
-  };
+  // const handleDelete = (id) => {
+  //   const updatedOrders = orders.filter((order) => order.id !== id);
+  //   setOrders(updatedOrders);
+  // };
 
   // Function to edit the order status
   const handleEditStatus = (order) => {
@@ -68,7 +68,7 @@ const Order = () => {
                 <th>Order Status</th>
                 <th>Order Details</th>
                 <th>Order Payment</th>
-                <th>Action</th>
+                {/* <th>Action</th> */}
               </tr>
             </thead>
             <tbody>
@@ -103,7 +103,7 @@ const Order = () => {
                       View Payment
                     </Button>
                   </td>
-                  <td>
+                  {/* <td>
                     <Button
                       variant="danger"
                       size="sm"
@@ -111,7 +111,7 @@ const Order = () => {
                     >
                       Delete
                     </Button>
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>
