@@ -1,0 +1,40 @@
+.sidebar {
+    width: 250px;
+    padding: 20px;
+    background-color: #f4f4f4;
+    color: #000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.sidebar h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.filter-group {
+    margin-bottom: 20px;
+}
+
+.filter-group h3 {
+    font-size: 1.1rem;
+    margin-bottom: 2px;
+}
+
+.checkbox-group label {
+    display: block;
+    margin: 1px 0;
+    font-size: 0.9em;
+}
+
+.price-range {
+    margin-top: 10px;
+    font-size: 1rem;
+}
+
+input[type='range'] {
+    width: 100%;
+}

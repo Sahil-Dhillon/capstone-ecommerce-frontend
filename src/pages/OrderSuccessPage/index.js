@@ -1,24 +1,31 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Container, Row, Col, Table, Button, Alert } from 'react-bootstrap';
 import { FaCheckCircle } from 'react-icons/fa';
+import { AppContext } from '../../context/AppContext';
+import axios from 'axios';
+import Loading from '../../components/Loading';
 
 const OrderSuccessPage = () => {
-  const userData = {
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    mobile: "123-456-7890",
-  };
+  const { order, userData } = useContext(AppContext);
+  const [deliveryAddress, setDeliveryAddress] = useState("")
+  useEffect(() => {
+    if(userData){
 
-  const orderDetails = {
-    orderId: "ORD123",
-    status: "Completed",
-    date: "2024-11-20",
-    totalAmount: "$150",
-    paymentMode: "Credit Card",
-    deliveryAddress: "123 Main Street, Springfield",
-  };
-
+      userData.listOfUserAdresses.forEach((x)=>{
+        if(x.addressId == order.addressId){
+          setDeliveryAddress(x.addressLine1 + ", " + x.addressLine2 + ", "+ x.city)
+        }
+      })
+    }
+  }, [userData,order])
+  
+  if(!userData){
+    return <Loading/>
+  }
+  
+  if(!order){
+    return <Loading/>
+  }
   return (
     <Container fluid className="py-5">
       <Row className="justify-content-center">
@@ -33,7 +40,7 @@ const OrderSuccessPage = () => {
           </div>
 
           {/* User Details Section */}
-          <div className="text-center mb-4">
+          {/*<div className="text-center mb-4">
             <h3 className="text-primary">Order Summary</h3>
             <Table striped bordered hover responsive className="mt-3">
               <tbody>
@@ -55,36 +62,44 @@ const OrderSuccessPage = () => {
                 </tr>
               </tbody>
             </Table>
-          </div>
+          </div>8/}
 
           {/* Order Details Table */}
           <div className="text-center mb-4">
             <h4>Order Details</h4>
             <Table striped bordered hover responsive className="mt-3">
               <tbody>
-                <tr>
+                {/* <tr>
                   <td>Order ID</td>
                   <td>{orderDetails.orderId}</td>
-                </tr>
+                </tr> */}
                 <tr>
                   <td>Status</td>
-                  <td>{orderDetails.status}</td>
+                  <td>{order.orderStatus}</td>
+                </tr>
+                <tr>
+                  <td>Receipent Name</td>
+                  <td>{userData.firstName}</td>
+                </tr>
+                <tr>
+                  <td>Phone No.</td>
+                  <td>{userData.mobile}</td>
                 </tr>
                 <tr>
                   <td>Date</td>
-                  <td>{orderDetails.date}</td>
+                  <td>{new Date(order.createdAt).toLocaleString()}</td>
                 </tr>
                 <tr>
                   <td>Total Amount</td>
-                  <td>{orderDetails.totalAmount}</td>
+                  <td>₹ {order.totalAmount}</td>
                 </tr>
                 <tr>
                   <td>Payment Mode</td>
-                  <td>{orderDetails.paymentMode}</td>
+                  <td>{order.payment.paymentMethod}</td>
                 </tr>
                 <tr>
                   <td>Delivery Address</td>
-                  <td>{orderDetails.deliveryAddress}</td>
+                  <td>{deliveryAddress}</td>
                 </tr>
               </tbody>
             </Table>

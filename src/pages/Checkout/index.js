@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const Checkout = () => {
     const [selectedPayment, setSelectedPayment] = useState('');
-    const [selectedAddress, setSelectedAddress] = useState(0);
+    const [selectedAddress, setSelectedAddress] = useState();
     const [orderPlaced, setOrderPlaced] = useState(false);
     const { order, setOrder, authToken, setCart, userData, updateUserData } = useContext(AppContext);
     const orderDetails = order
@@ -20,21 +20,11 @@ const Checkout = () => {
 
     const handlePlaceOrder = () => {
 
-        if (selectedPayment ) {
-            var d = new Date();
-
-            setOrder({
-                ...order,
-                orderStatus: "Completed",
-                payment: {
-                    "paymentMethod": selectedPayment,
-                    "totalAmount": order.totalAmount,
-                    "createdAt": d.toLocaleString(),
-                    "status": "Completed"
-                }
-            })
+        if (selectedPayment && selectedAddress) {
+            console.log("Selected Address Id: ",selectedAddress)
             axios.post('/order/placeorder',{
                 ...order,
+                addressId: selectedAddress,
                 orderStatus: "Completed",
                 payment: {
                     "paymentMethod": selectedPayment,
@@ -48,9 +38,15 @@ const Checkout = () => {
                 }
             }).then((x)=>{
                 setOrderPlaced(true);
+                setOrder(x.data)
+                axios.put('/cartitem/emptyCart',{},{
+                    headers:{
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                })
+                updateUserData()
                 navigate("/OrderSuccess")
             })
-        
         } else {
             alert('Please select both a payment method and a delivery address!');
         }
@@ -69,9 +65,7 @@ const Checkout = () => {
             </div>
         );
     }
-
     return (
-
         <div className="container mt-5">
             <h2 className="text-center mb-4">
                 <FaShoppingCart /> Checkout
@@ -134,11 +128,10 @@ const Checkout = () => {
                                 {userData && userData.listOfUserAdresses.map((address, index) => {
                                     address.id = index
                                     return (
-
                                         <div
-                                            key={address.id}
-                                            className={`position-relative list-group-item list-group-item-action p-3 ${selectedAddress === address.id ? 'active' : ''}`}
-                                            onClick={() => setSelectedAddress(address.id)}
+                                            key={address.addressId}
+                                            className={`position-relative list-group-item list-group-item-action p-3 ${selectedAddress === address.addressId ? 'active' : ''}`}
+                                            onClick={() => setSelectedAddress(address.addressId)}
                                         >
                                             {/* Label */}
                                             <div
