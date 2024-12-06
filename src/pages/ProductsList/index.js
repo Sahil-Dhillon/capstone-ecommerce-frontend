@@ -71,7 +71,7 @@ const ProductListPage = () => {
 
   return (
     <>
-      <CategoriesBar />
+      {/* <CategoriesBar /> */}
       <div className="container-fluid">
         {/* Top Bar */}
         <div className="row align-items-center py-3">

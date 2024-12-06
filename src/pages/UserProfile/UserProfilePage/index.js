@@ -14,7 +14,7 @@ const UserProfilePage = () => {
   const [selectedOrderItemDetails, setselectedOrderItemDetails] = useState([])
   const [selectedAddress, setSelectedAddress] = useState(null);
   const { userData, authToken, updateUserData } = useContext(AppContext);
-  const [profileImg, setProfileImg] = useState("")
+  // const [profileImg, setProfileImg] = useState("")
   var userImageUrl = ""
 
 
@@ -57,35 +57,6 @@ const UserProfilePage = () => {
   }, [selectedOrderDetails]);
 
 
-  const [addresses, setAddresses] = useState([
-    {
-      id: 1,
-      recipientName: "John Doe",
-      phone: "123-456-7890",
-      addressLine1: "123 Main Street",
-      addressLine2: "Apt 4B",
-      city: "Springfield",
-      state: "IL",
-      country: "USA",
-      pincode: "62704",
-      label: "Home",
-      primary: true,
-    },
-    {
-      id: 2,
-      recipientName: "Jane Smith",
-      phone: "987-654-3210",
-      addressLine1: "456 Elm Street",
-      addressLine2: "Suite 2A",
-      city: "Chicago",
-      state: "IL",
-      country: "USA",
-      pincode: "60616",
-      label: "Work",
-      primary: false,
-    },
-  ]);
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -125,25 +96,29 @@ const UserProfilePage = () => {
   }
 
   const handleAddOrUpdateAddress = (address) => {
-    axios.put('/users/me/addresses/update',{...address},{
-      headers:{
-        Authorization: `Bearer ${authToken}`,
-      }
-    }).then((res)=>{
-      console.log(res.data)
-      updateUserData()
-    })
-    
+    if (address.addressId) {
+      axios.put('/users/me/addresses/update', { ...address }, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        }
+      }).then((res) => {
+        console.log(res.data)
+        updateUserData()
+      })
+    }else{
+      axios.put('/users/me/addresses/add', { ...address }, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        }
+      }).then((res) => {
+        console.log(res.data)
+        updateUserData()
+      })
+    }
+
     setShowAddressModal(false);
   };
 
-  const handleSetPrimary = (id) => {
-    setAddresses((prev) =>
-      prev.map((addr) =>
-        addr.id === id ? { ...addr, primary: true } : { ...addr, primary: false }
-      )
-    );
-  };
   if (!userData) {
     return <Loading />
   }
@@ -366,7 +341,6 @@ const UserProfilePage = () => {
                 country: e.target.country.value,
                 pincode: e.target.pincode.value,
                 label: e.target.label.value,
-                primary: e.target.primary.checked,
               };
               handleAddOrUpdateAddress(newAddress);
             }}
@@ -434,13 +408,7 @@ const UserProfilePage = () => {
                 defaultValue={selectedAddress?.label || ""}
               />
             </Form.Group>
-            <Form.Group controlId="primary">
-              <Form.Check
-                type="checkbox"
-                label="Primary Address"
-                defaultChecked={selectedAddress?.primary || false}
-              />
-            </Form.Group>
+
 
             <button className="btn btn-dark btn-sm my-2" type="submit">
               {selectedAddress ? "Update Address" : "Add Address"}

@@ -3,11 +3,13 @@ import { FaShoppingCart, FaCreditCard, FaPaypal, FaMoneyBillAlt, FaPlus } from '
 import { Link, useNavigate } from 'react-router-dom';
 import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
+import { Form, Modal } from 'react-bootstrap';
 
 const Checkout = () => {
     const [selectedPayment, setSelectedPayment] = useState('');
     const [selectedAddress, setSelectedAddress] = useState();
     const [orderPlaced, setOrderPlaced] = useState(false);
+    const [showAddressModal, setShowAddressModal] = useState(false);
     const { order, setOrder, authToken, setCart, userData, updateUserData } = useContext(AppContext);
     const orderDetails = order
     const navigate = useNavigate()
@@ -21,8 +23,8 @@ const Checkout = () => {
     const handlePlaceOrder = () => {
 
         if (selectedPayment && selectedAddress) {
-            console.log("Selected Address Id: ",selectedAddress)
-            axios.post('/order/placeorder',{
+            console.log("Selected Address Id: ", selectedAddress)
+            axios.post('/order/placeorder', {
                 ...order,
                 addressId: selectedAddress,
                 orderStatus: "Completed",
@@ -32,15 +34,15 @@ const Checkout = () => {
                     // "createdAt": "",
                     "status": "Completed"
                 }
-            },{
+            }, {
                 headers: {
                     Authorization: `Bearer ${authToken}`,
                 }
-            }).then((x)=>{
+            }).then((x) => {
                 setOrderPlaced(true);
                 setOrder(x.data)
-                axios.put('/cartitem/emptyCart',{},{
-                    headers:{
+                axios.put('/cartitem/emptyCart', {}, {
+                    headers: {
                         Authorization: `Bearer ${authToken}`,
                     },
                 })
@@ -52,8 +54,17 @@ const Checkout = () => {
         }
     };
 
-    const handleAddAddress = () => {
-        alert('Add address functionality is not implemented yet!');
+    const handleAddAddress = (address) => {
+        axios.put('/users/me/addresses/add', { ...address }, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            }
+        }).then((res) => {
+            console.log(res.data)
+            updateUserData()
+        })
+        setShowAddressModal(false);
+        alert("Address added successfully.")
     };
 
     if (orderPlaced) {
@@ -116,7 +127,7 @@ const Checkout = () => {
                                 Delivery Address
                                 <FaPlus
                                     className="text-primary cursor-pointer"
-                                    onClick={handleAddAddress}
+                                    onClick={() => setShowAddressModal(true)}
                                     style={{ cursor: 'pointer' }}
                                     title="Add New Address"
                                 />
@@ -161,6 +172,100 @@ const Checkout = () => {
                             </div>
                         </div>
                     </div>
+                    {/* Address Modal */}
+                    <Modal show={showAddressModal} onHide={() => setShowAddressModal(false)}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Add Address</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <Form
+                                onSubmit={(e) => {
+                                    e.preventDefault();
+                                    const newAddress = {
+                                        recepientName: e.target.recipientName.value,
+                                        addressMobile: e.target.phone.value,
+                                        addressLine1: e.target.addressLine1.value,
+                                        addressLine2: e.target.addressLine2.value,
+                                        city: e.target.city.value,
+                                        state: e.target.state.value,
+                                        country: e.target.country.value,
+                                        pincode: e.target.pincode.value,
+                                        label: e.target.label.value,
+                                    };
+                                    handleAddAddress(newAddress);
+                                }}
+                            >
+                                <Form.Group controlId="recipientName">
+                                    <Form.Label>Recipient Name</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        defaultValue={selectedAddress?.recepientName || ""}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="phone">
+                                    <Form.Label>Phone</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        defaultValue={selectedAddress?.addressMobile || ""}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="addressLine1">
+                                    <Form.Label>Address Line 1</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        defaultValue={selectedAddress?.addressLine1 || ""}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="addressLine2">
+                                    <Form.Label>Address Line 2</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        defaultValue={selectedAddress?.addressLine2 || ""}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="city">
+                                    <Form.Label>City</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        defaultValue={selectedAddress?.city || ""}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="state">
+                                    <Form.Label>State</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        defaultValue={selectedAddress?.state || ""}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="country">
+                                    <Form.Label>Country</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        defaultValue={selectedAddress?.country || ""}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="pincode">
+                                    <Form.Label>Pincode</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        defaultValue={selectedAddress?.pincode || ""}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="label">
+                                    <Form.Label>Label (e.g., Home, Work)</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        defaultValue={selectedAddress?.label || ""}
+                                    />
+                                </Form.Group>
+
+
+                                <button className="btn btn-dark btn-sm my-2" type="submit">
+                                    {selectedAddress ? "Update Address" : "Add Address"}
+                                </button>
+                            </Form>
+                        </Modal.Body>
+                    </Modal>
 
                     {/* Payment Options */}
                     <div className="card">
@@ -187,7 +292,7 @@ const Checkout = () => {
                                 </button>
                             </div>
                             <button
-                                
+
                                 className="btn btn-success mt-4 w-100"
                                 onClick={handlePlaceOrder}
                             >

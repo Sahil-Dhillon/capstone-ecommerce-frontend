@@ -8,10 +8,10 @@ const ReviewsList = ({ reviews }) => {
       {reviews.map((review, index) => (
         <Review
           key={index}
-          title={review.title}
-          comment={review.comment}
+          title={review.review}
+          // comment={review.comment}
           rating={review.rating}
-          user={review.user}
+          user={review.userId}
         />
       ))}
     </div>

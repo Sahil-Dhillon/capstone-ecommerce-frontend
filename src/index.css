@@ -26,7 +26,7 @@ code {
 
 *::-webkit-scrollbar {
     height: 8px;
-    width: 0px;
+    width: 5px;
     /* Height of the scrollbar for horizontal scroll */
 }
 
@@ -37,11 +37,11 @@ code {
 }
 
 *::-webkit-scrollbar-thumb {
-    background: #a8aeb5;
+    background: #93979c;
     /* Scrollbar color */
     border-radius: 10px;
     /* Round edges */
-    border: 2px solid #f1f1f1;
+    border: 0px solid #f1f1f1;
     /* Optional: adds a gap around the thumb */
 }
 

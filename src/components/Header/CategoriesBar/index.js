@@ -1,12 +1,13 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const CategoriesBar = () => {
     const [categories, setCategories] = useState([]); // State to store categories
     const [loading, setLoading] = useState(true); // State for loading
     const [error, setError] = useState(null); // State for errors
-
+    const location = useLocation(); // Get current route
+    const isHomePage = location.pathname === '/';
 
     useEffect(() => {
     axios.get("http://localhost:8085/category/all")
@@ -29,7 +30,16 @@ const CategoriesBar = () => {
 //     return <div>Error: {error}</div>;
 //   }
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light" style={{
+        backgroundColor: '#fff',
+        display: isHomePage ? 'none' : 'block',
+        color: isHomePage ? '#fff' : '#000',
+        padding: '10px 20px',
+        // position: 'sticky',
+        width: '100%',
+        top:0,
+        zIndex: 1000,
+    }}>
                 <div className="container-fluid">
                     <button
                         className="navbar-toggler"

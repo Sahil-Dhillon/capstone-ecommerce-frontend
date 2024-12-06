@@ -64,46 +64,6 @@ const OrderSuccessPage = () => {
             </Table>
           </div>8/}
 
-          {/* Order Details Table */}
-          <div className="text-center mb-4">
-            <h4>Order Details</h4>
-            <Table striped bordered hover responsive className="mt-3">
-              <tbody>
-                {/* <tr>
-                  <td>Order ID</td>
-                  <td>{orderDetails.orderId}</td>
-                </tr> */}
-                <tr>
-                  <td>Status</td>
-                  <td>{order.orderStatus}</td>
-                </tr>
-                <tr>
-                  <td>Receipent Name</td>
-                  <td>{userData.firstName}</td>
-                </tr>
-                <tr>
-                  <td>Phone No.</td>
-                  <td>{userData.mobile}</td>
-                </tr>
-                <tr>
-                  <td>Date</td>
-                  <td>{new Date(order.createdAt).toLocaleString()}</td>
-                </tr>
-                <tr>
-                  <td>Total Amount</td>
-                  <td>₹ {order.totalAmount}</td>
-                </tr>
-                <tr>
-                  <td>Payment Mode</td>
-                  <td>{order.payment.paymentMethod}</td>
-                </tr>
-                <tr>
-                  <td>Delivery Address</td>
-                  <td>{deliveryAddress}</td>
-                </tr>
-              </tbody>
-            </Table>
-          </div>
           
           {/* Button to go back or proceed */}
           <div className="text-center mt-4">

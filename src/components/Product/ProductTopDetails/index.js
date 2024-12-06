@@ -44,9 +44,9 @@ const ProductDetails = ({ product }) => {
       {/* Product Rating */}
       <div className="rating">
           <span className="rating-stars">
-            {"★".repeat(Math.floor(product.rating)) + "☆".repeat(5 - Math.floor(product.rating))}
+            {"★".repeat(Math.floor(product.productRating)) + "☆".repeat(5 - Math.floor(product.productRating))}
           </span>
-          <span className="rating-value">({product.rating}/5)</span>
+          <span className="rating-value">({product.productRating}/5)</span>
         </div>
       <h3>MRP: ₹ {product.price}</h3>
       <p className="inclusive">Inclusive of all taxes (Also includes all applicable duties)</p>

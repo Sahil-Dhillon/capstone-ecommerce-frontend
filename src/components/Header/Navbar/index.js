@@ -121,19 +121,23 @@ import { IoMdSearch } from 'react-icons/io';
 import { IoIosCart } from 'react-icons/io'; // Importing the Cart icon
 import { AppContext } from '../../../context/AppContext';
 import { Dropdown } from 'react-bootstrap'; // Importing React-Bootstrap Dropdown
+import CategoriesBar from '../CategoriesBar';
 
 const Navbar = () => {
     const location = useLocation(); // Get current route
     const isHomePage = location.pathname === '/';
-    const { userData, loading, updateUserData, cart } = useContext(AppContext); // Assuming cartItems is part of your context
+    const { userData, loading, updateUserData } = useContext(AppContext); // Assuming cartItems is part of your context
     const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for managing dropdown open/close
-
+    const [userDataLocal, setUserDataLocal] = useState({})
     // Fetch user data if not available
     useEffect(() => {
         if (!userData && !loading) {
             updateUserData();
+        }else{
+            setUserDataLocal(userData)
         }
     }, [userData, loading, updateUserData]);
+
 
     // Handle Logout
     const handleLogout = () => {
@@ -150,6 +154,7 @@ const Navbar = () => {
                 padding: '10px 20px',
                 position: isHomePage ? 'absolute' : 'static',
                 width: '100%',
+                top:0,
                 zIndex: 1000,
             }}
         >
@@ -194,7 +199,7 @@ const Navbar = () => {
                                 fontWeight: 'bold',
                             }}
                         >
-                            {userData.userCart.listOfCartItems.length}
+                            {userDataLocal.userCart.listOfCartItems.length}
                         </div>
                     )}
                 </div>
@@ -247,6 +252,7 @@ const Navbar = () => {
             </div>
 
             {/* Bottom Bar */}
+            <CategoriesBar/>
         </header>
     );
 };

@@ -70,7 +70,6 @@ const Sidebar = () => {
     colors: [],
     gender: '',
   });
-
   const categories = ['Electronics', 'Fashion', 'Home', 'Sports'];
   const brands = ['Nike', 'Adidas', 'Samsung', 'Apple'];
   const colors = ['Red', 'Blue', 'Green', 'Black', 'White'];

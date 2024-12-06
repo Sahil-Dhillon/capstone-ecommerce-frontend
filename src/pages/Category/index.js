@@ -5,6 +5,7 @@ import CategoriesBar from "../../components/Header/CategoriesBar";
 import { TailSpin } from "react-loader-spinner";
 import Loading from "../../components/Loading";
 import ErrorPage from "../../components/Error";
+import SubCategoryCard from "../../components/Categories/SubCategoryCarousel.js";
 
 
 const CategoriesPage = () => {
@@ -44,13 +45,11 @@ const CategoriesPage = () => {
         axios.get(`/subcategory/byCategoryName/${categoryName}`).then((subCategoryResponse)=>{
           setSubcategories(subCategoryResponse.data)
           console.log(subCategoryResponse.data)
-          axios.get(`/product/bySubCategory/1?pageSize=3`).then((productsResponse)=>{
-            setProducts(productsResponse.data)
+          
             setCategory(response.data); // Set categories data
       console.log(response.data)
       setLoading(false); // Set loading to false
           })
-        })
       })
       .catch((err) => {
       setError(err.message); // Set error message
@@ -71,70 +70,17 @@ const CategoriesPage = () => {
 
   return (
     <>
-    <CategoriesBar/>
+    {/* <CategoriesBar/> */}
     <div style={{ fontFamily: "Arial, sans-serif", margin: "20px" }}>
       <header style={{ textAlign: "center", padding: "20px", background: "#333", color: "#fff" }}>
         <h1>{category.name}</h1>
         <p>Find the best deals in {category.name}</p>
       </header>
 
-      <div style={{ padding: "20px", background: "#f9f9f9", borderRadius: "5px" }}>
+      <div style={{ padding: "20px", background: "#fff", borderRadius: "5px" }}>
         {subcategories.map((subcategory) => (
-          <div key={subcategory.name} style={{ marginBottom: "40px" }}>
-             <Link to={`/products/${subcategory.name}`} className="d-flex justify-content-between align-items-center" style={{ marginBottom: "10px", color: "#333",fontSize:'1.2rem',textDecoration:'none' }}>{subcategory.name}
-             <button className="btn btn-dark m-2 ">Explore More...</button>
-             </Link>
-            <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
-              {products.map((product) => (
-                <div
-                key={product.id}
-                  style={{
-                    border: "1px solid #ddd",
-                    borderRadius: "10px",
-                    padding: "15px",
-                    width: "calc(33.333% - 20px)",
-                    background: "#fff",
-                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                    textAlign: "center",
-                    }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-5px)";
-                    e.currentTarget.style.boxShadow = "0 6px 12px rgba(0, 0, 0, 0.15)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
-                      }}
-                      >
-                      <img
-                      src={product.profileImgUrl}
-                      alt={product.name}
-                      style={{
-                        width: "auto",
-                        height: "100px",
-                        borderRadius: "10px",
-                        marginBottom: "10px",
-                    }}
-                  />
-                  <h3 style={{ fontSize: "18px", color: "#333", margin: "10px 0" }}>{product.name}</h3>
-                  <p style={{ color: "#007bff", fontWeight: "bold", fontSize: "16px" }}>{product.price}</p>
-                  <Link to={`/product/${product.productId}`}
-                  style={{
-                    padding: "10px 15px",
-                    background: "#007bff",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                    }}
-                  >
-                  Buy Now
-                  </Link>
-                  </div>
-                  ))}
-                  </div>
-                  
+          <div style={{ padding: "8px",margin:"5px", background: "#f1f1f1", borderRadius: "5px" }}>
+          <SubCategoryCard subcategory={subcategory}/>
           </div>
         ))}
       </div>
