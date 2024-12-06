@@ -95,6 +95,7 @@ const ProductManagement = () => {
         "profileImgUrl":newProduct.primaryImage,
         "listOfImages":newProduct.galleryImages
       }
+      
 
     setProducts([...products, productRequest]);
     setShowModal(false);
