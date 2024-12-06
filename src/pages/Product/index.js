@@ -16,15 +16,12 @@ import ErrorPage from "../../components/Error";
 
 const ProductPage = () => {
   const [selectedImage, setSelectedImage] = useState(0);
-  const {subCategoryName,productId}= useParams();
-    // const { subCategoryName } = useParams(); // Extract subCategoryName from URL
-    // console.log(subCategoryName)
+  const {productId}= useParams();
     const [product, setProduct] = useState({});
-    // const [subcategory, setSubcategory] = useState([])
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    // const [category, setCategory] = useState({});
-  
+
+    
     useEffect(() => {
       axios.get(`/product/${productId}`).then((res)=>{
 
@@ -32,11 +29,10 @@ const ProductPage = () => {
         setLoading(false)
       })
       .catch((err) => {
-        setError(err.message); // Set error message
-        setLoading(false); // Set loading to false
+        setError(err.message);
+        setLoading(false);
         });
-    
-    }, [subCategoryName]);
+    }, []);
 
 
     if (loading && product != {}) {

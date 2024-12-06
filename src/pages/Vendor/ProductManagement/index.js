@@ -13,15 +13,15 @@ const ProductManagement = () => {
     description: '',
     tags: [],
     variations: [],
-    specs: [],
+    listOfSpecs: [],
     price: '',
     quantity: '',
     category: '',
     subcategory: '',
     primaryImage: null,
-    galleryImages: [],
+    galleryImages: []
   });
-  const [spec, setSpec] = useState({ tag: '', value: '' });
+  const [spec, setSpec] = useState({ title: '', body: '' });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -46,9 +46,9 @@ const ProductManagement = () => {
   };
 
   const handleAddSpec = () => {
-    if (spec.tag && spec.value) {
-      setNewProduct({ ...newProduct, specs: [...newProduct.specs, spec] });
-      setSpec({ tag: '', value: '' });
+    if (spec.title && spec.body) {
+      setNewProduct({ ...newProduct, listOfSpecs: [...newProduct.listOfSpecs, spec] });
+      setSpec({ title: '', body: '' });
     }
   };
 
@@ -80,11 +80,21 @@ const ProductManagement = () => {
   };
 
   const handleSubmit = () => {
-    const productRequest = {
-      id: `P${products.length + 1}`,
-      name: newProduct.name,
-      status: 'Pending',
-    };
+    const productRequest = 
+      {
+        "vendorId": "1",
+        "name": newProduct.name,
+        "brand": newProduct.brand,
+        "description": newProduct.description,
+        "listOfSpecs": newProduct.listOfSpecs,
+        "price": newProduct.price,
+        "quantity": 0,
+        "isAvailable": true,
+        "variations": newProduct.variations,
+        "tags": newProduct.tags,
+        "profileImgUrl":newProduct.primaryImage,
+        "listOfImages":newProduct.galleryImages
+      }
 
     setProducts([...products, productRequest]);
     setShowModal(false);
@@ -105,7 +115,7 @@ const ProductManagement = () => {
   };
 
   return (
-    <div className="product-management">
+    <div className="product-management p-4">
       <h3>Product Management</h3>
 
       <Button className="mb-3" onClick={() => setShowModal(true)}>
@@ -240,8 +250,8 @@ const ProductManagement = () => {
                 <tbody>
                   {newProduct.specs.map((spec, index) => (
                     <tr key={index}>
-                      <td>{spec.tag}</td>
-                      <td>{spec.value}</td>
+                      <td>{spec.title}</td>
+                      <td>{spec.body}</td>
                       <td>
                         <Button
                           variant="danger"
@@ -324,8 +334,8 @@ const ProductManagement = () => {
                   <Form.Control
                     type="text"
                     placeholder="Enter spec tag"
-                    value={spec.tag}
-                    onChange={(e) => setSpec({ ...spec, tag: e.target.value })}
+                    value={spec.title}
+                    onChange={(e) => setSpec({ ...spec, title: e.target.value })}
                   />
                 </Form.Group>
               </Col>
@@ -335,8 +345,8 @@ const ProductManagement = () => {
                   <Form.Control
                     type="text"
                     placeholder="Enter spec value"
-                    value={spec.value}
-                    onChange={(e) => setSpec({ ...spec, value: e.target.value })}
+                    value={spec.body}
+                    onChange={(e) => setSpec({ ...spec, body: e.target.value })}
                   />
                 </Form.Group>
               </Col>
