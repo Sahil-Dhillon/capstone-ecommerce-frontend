@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Table, Button, Modal, Form, Col, Row, Badge } from 'react-bootstrap';
+import AWS from 'aws-sdk';
+import axios from 'axios';
+import { AppContext } from '../../../context/AppContext';
+
 
 const ProductManagement = () => {
   const [products, setProducts] = useState([
     { id: 'P001', name: 'Sample Product', status: 'Pending' },
   ]);
+  const { addToCart , cart,authToken,updateUserData,userData} = useContext(AppContext);
   const [showModal, setShowModal] = useState(false);
   const [showSpecsModal, setShowSpecsModal] = useState(false);
   const [newProduct, setNewProduct] = useState({
@@ -21,7 +26,79 @@ const ProductManagement = () => {
     primaryImage: null,
     galleryImages: []
   });
+
+
+  AWS.config.update({
+    accessKeyId: 'AKIAX7XJSL7WNCGGVJN3',
+    secretAccessKey: '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',
+    region: 'ap-south-1',
+  });
+
+  const s3 = new AWS.S3();
   const [spec, setSpec] = useState({ title: '', body: '' });
+
+  // Fetch category and subcategory data
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
+  
+  useEffect(() => {
+    // Fetch categories
+    updateUserData()
+    axios.get('/category/all')
+    .then(response => {
+      setCategories(response.data);
+    })
+    .catch(error => console.error('Error fetching categories:', error));
+  }, [authToken]);
+
+  useEffect(()=>{
+    axios.get(`/subcategory/byCategoryName/${newProduct.category}`)
+    .then(response => {
+      setSubcategories(response.data);
+    })
+    .catch(error => console.error('Error fetching sub categories:', error));
+  },[newProduct.category])
+
+
+
+  // const uploadImage = async (file) => {
+  //   const params = {
+  //     Bucket: 'ecom-imgs', // The name of your bucket
+  //     Key: `images/${file.name}`, // The path where the file will be stored
+  //     Body: file,  // The file itself
+  //     // ACL: 'public-read',  // Ensures the file is publicly accessible
+  //     ContentType: file.type, // The type of file (e.g., image/jpeg)
+  //   };
+  
+  //   s3.upload(params, function (err, data) {
+  //     if (err) {
+  //       console.error('Error uploading file:', err);
+  //       return "";
+  //     }
+  //     console.log('Successfully uploaded:', data.Location); // The URL of the uploaded file
+  //     return data.location
+  //   });
+  // };
+  const uploadImage = (file) => {
+    return new Promise((resolve, reject) => {
+      const params = {
+        Bucket: 'ecom-imgs',
+        Key: `images/${file.name}`,
+        Body: file,
+        ContentType: file.type,
+      };
+  
+      s3.upload(params, function (err, data) {
+        if (err) {
+          reject(err); // Reject if error occurs
+        } else {
+          resolve(data.Location); // Resolve with the URL if upload is successful
+        }
+      });
+    });
+  };
+  
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -55,7 +132,7 @@ const ProductManagement = () => {
   const handleRemoveSpec = (index) => {
     setNewProduct({
       ...newProduct,
-      specs: newProduct.specs.filter((_, i) => i !== index),
+      listOfSpecs: newProduct.listOfSpecs.filter((_, i) => i !== index),
     });
   };
 
@@ -79,40 +156,62 @@ const ProductManagement = () => {
     }
   };
 
-  const handleSubmit = () => {
-    const productRequest = 
+  const handleSubmit = async () => {
+    var productRequest = 
       {
-        "vendorId": "1",
+        "vendorId": userData.email,
         "name": newProduct.name,
         "brand": newProduct.brand,
         "description": newProduct.description,
         "listOfSpecs": newProduct.listOfSpecs,
         "price": newProduct.price,
         "quantity": 0,
-        "isAvailable": true,
+        "isAvailable": false,
         "variations": newProduct.variations,
-        "tags": newProduct.tags,
-        "profileImgUrl":newProduct.primaryImage,
-        "listOfImages":newProduct.galleryImages
+        "tags": newProduct.tags.join(" "),
+        "profileImgUrl":"",
+        "listOfImages":[]
       }
-      
 
-    setProducts([...products, productRequest]);
-    setShowModal(false);
-    setNewProduct({
-      name: '',
-      brand: '',
-      description: '',
-      tags: [],
-      variations: [],
-      specs: [],
-      price: '',
-      quantity: '',
-      category: '',
-      subcategory: '',
-      primaryImage: null,
-      galleryImages: [],
-    });
+      // Upload primary image (if available)
+  if (newProduct.primaryImage) {
+    productRequest.profileImgUrl = await uploadImage(newProduct.primaryImage);
+  }
+
+  // Upload gallery images (if any)
+  if (newProduct.galleryImages.length > 0) {
+    for (let imgIndex = 0; imgIndex < newProduct.galleryImages.length; imgIndex++) {
+      const imageUrl = await uploadImage(newProduct.galleryImages[imgIndex]);
+      productRequest.listOfImages.push(imageUrl);
+    }
+  }
+
+  // Log the product request object once all uploads are complete
+  console.log(productRequest);
+    axios.post(`/product/add/${newProduct.subcategory}`,productRequest,{
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      }
+    }).then((res)=>{
+      console.log(res.data)
+      setShowModal(false);
+
+    })
+    // setProducts([...products, productRequest]);
+    // setNewProduct({
+    //   name: '',
+    //   brand: '',
+    //   description: '',
+    //   tags: [],
+    //   variations: [],
+    //   listOfSpecs: [],
+    //   price: '',
+    //   quantity: '',
+    //   category: '',
+    //   subcategory: '',
+    //   primaryImage: null,
+    //   galleryImages: [],
+    // });
   };
 
   return (
@@ -174,6 +273,7 @@ const ProductManagement = () => {
                   />
                 </Form.Group>
               </Col>
+
             </Row>
             <Form.Group controlId="description" className="mt-3">
               <Form.Label>Description</Form.Label>
@@ -186,6 +286,58 @@ const ProductManagement = () => {
                 onChange={handleInputChange}
               />
             </Form.Group>
+            <Row className="mt-3">
+              <Col md={4} className="pe-0">
+                <Form.Group controlId="price">
+                  <Form.Label>Price</Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder="Enter product price"
+                    name="price"
+                    value={newProduct.price}
+                    onChange={handleInputChange}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={4} className="pe-0">
+                <Form.Group controlId="category">
+                  <Form.Label>Category</Form.Label>
+                  <Form.Control
+                    as="select"
+                    name="category"
+                    value={newProduct.category}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map((category) => (
+                      <option key={category.id} value={category.name}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
+              </Col>
+              <Col md={4}>
+                <Form.Group controlId="subcategory">
+                  <Form.Label>Subcategory</Form.Label>
+                  <Form.Control
+                    as="select"
+                    name="subcategory"
+                    value={newProduct.subcategory}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select Subcategory</option>
+                    {subcategories
+                      // .filter((sub) => sub.categoryId === newProduct.category)
+                      .map((subcategory) => (
+                        <option key={subcategory.id} value={subcategory.subcategoryId}>
+                          {subcategory.name}
+                        </option>
+                      ))}
+                  </Form.Control>
+                </Form.Group>
+              </Col>
+            </Row>
             <Row className="mt-3">
               <Col md={6}>
                 <Form.Group controlId="tags">
@@ -249,7 +401,7 @@ const ProductManagement = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {newProduct.specs.map((spec, index) => (
+                  {newProduct.listOfSpecs.map((spec, index) => (
                     <tr key={index}>
                       <td>{spec.title}</td>
                       <td>{spec.body}</td>
