@@ -116,7 +116,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import typo_logo from '../../../assets/img/logos/2-removebg-preview.png';
 import small_logo from '../../../assets/img/logos/uw-logo-no-bg-black.png';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { IoMdSearch } from 'react-icons/io';
 import { IoIosCart } from 'react-icons/io'; // Importing the Cart icon
 import { AppContext } from '../../../context/AppContext';
@@ -129,6 +129,18 @@ const Navbar = () => {
     const { userData, loading, updateUserData } = useContext(AppContext); // Assuming cartItems is part of your context
     const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for managing dropdown open/close
     const [userDataLocal, setUserDataLocal] = useState({})
+    const [searchTerm, setSearchTerm] = useState("");
+    const navigate = useNavigate();
+    const handleInputChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        if (searchTerm.trim()) {
+            navigate(`/products?q=${searchTerm}`)
+        }
+    };
     // Fetch user data if not available
     useEffect(() => {
         if (!userData && !loading) {
@@ -170,14 +182,21 @@ const Navbar = () => {
 
                 {/* Search Bar */}
                 <div className="d-none d-md-block">
-                    <form className="d-flex align-items-center bg-light pe-2">
-                        <input
-                            type="text"
-                            className="form-control me-2"
-                            placeholder="Search for products..."
-                        />
-                        <IoMdSearch size={30} color="black" />
-                    </form>
+                <form
+            className="d-flex align-items-center bg-light pe-2"
+            onSubmit={handleSearchSubmit}
+        >
+            <input
+                type="text"
+                className="form-control me-2"
+                placeholder="Search for products..."
+                value={searchTerm}
+                onChange={handleInputChange}
+            />
+            <button type="submit" className="btn btn-light">
+                <IoMdSearch size={30} color="black" />
+            </button>
+        </form>
                 </div>
                 <div  className ="d-flex align-items-center pe-2"> 
                 {/* Cart Icon with Bubble */}
