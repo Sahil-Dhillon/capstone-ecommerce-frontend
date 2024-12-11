@@ -499,7 +499,7 @@ const SubCategory = () => {
                         className="d-flex justify-content-between align-items-center"
                       >
                         {subCategory.name}
-                        <div>
+                        {/* <div>
                           <Button
                             variant="outline-primary"
                             size="sm"
@@ -517,7 +517,7 @@ const SubCategory = () => {
                           >
                             <FaTrash />
                           </Button>
-                        </div>
+                        </div> */}
                       </ListGroup.Item>
                     ))
                   ) : (

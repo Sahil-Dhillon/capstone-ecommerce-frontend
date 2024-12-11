@@ -4,6 +4,7 @@ import { FaPen } from "react-icons/fa";
 import { AppContext } from "../../../context/AppContext";
 import axios from "axios";
 import Loading from "../../../components/Loading";
+import AWS from 'aws-sdk'
 
 const UserProfilePage = () => {
   const [showImageModal, setShowImageModal] = useState(false);
@@ -56,12 +57,39 @@ const UserProfilePage = () => {
     }
   }, [selectedOrderDetails]);
 
+  AWS.config.update({
+    accessKeyId: 'AKIAX7XJSL7WNCGGVJN3',
+    secretAccessKey: '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',
+    region: 'ap-south-1',
+  });
 
-  const handleImageChange = (e) => {
+  const s3 = new AWS.S3();
+
+  const uploadImage = (file) => {
+    return new Promise((resolve, reject) => {
+      const params = {
+        Bucket: 'ecom-imgs',
+        Key: `user/${file.name}`,
+        Body: file,
+        ContentType: file.type,
+      };
+  
+      s3.upload(params, function (err, data) {
+        if (err) {
+          reject(err); // Reject if error occurs
+        } else {
+          resolve(data.Location); // Resolve with the URL if upload is successful
+        }
+      });
+    });
+  };
+
+
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file); // Create a local URL for the selected image
-      userImageUrl = imageUrl
+      // const imageUrl = URL.createObjectURL(file); // Create a local URL for the selected image
+      userImageUrl = await uploadImage(file);
     }
     setShowImageModal(false); // Close the modal after the image is selected
   };
@@ -130,7 +158,7 @@ const UserProfilePage = () => {
         <div className="text-center position-relative w-50">
           <img
             // src={userData.profileImg}
-            src={userData.profileImgUrl}
+            src={userData.profileImg}
             alt="Profile"
             className="rounded-circle img-fluid"
             style={{ width: "200px", height: "200px", objectFit: 'cover' }}
@@ -169,6 +197,10 @@ const UserProfilePage = () => {
               <tr>
                 <td>Role</td>
                 <td>{userData.roles}</td>
+              </tr>
+              <tr>
+                <td>Wallet Balance</td>
+                <td>₹{userData.walletBalance.toFixed(2)}</td>
               </tr>
             </tbody>
           </Table>
@@ -475,9 +507,11 @@ const UserProfilePage = () => {
                         </div>
                         <div className="flex-grow-1">
                           <p className="mb-1"><strong>Name:</strong> {item.name}</p>
+                          {item.variations != "undefined"  && 
                           <p className="mb-1"><strong>Size:</strong> {item.variations}</p>
+                          }
                           <p className="mb-1"><strong>Quantity:</strong> {item.quantity}</p>
-                          <p className="mb-1"><strong>Price:</strong> ${item.price}</p>
+                          <p className="mb-1"><strong>Price:</strong> ₹{item.price}</p>
                         </div>
                       </div>
                     </li>

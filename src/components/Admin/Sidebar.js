@@ -1,10 +1,11 @@
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import "./Sidebar.css";
 // import typo_logo from '../../assets/img/logos/2-removebg-preview.png'
 import small_logo from '../../assets/img/logos/uw-logo-bg-white.png'
 
 const Sidebar = () => {
+  const location = useLocation();
   return (
     <div className="sidebar">
       <div>
@@ -15,34 +16,24 @@ const Sidebar = () => {
                     </Link>
                 </div>
       <ul>
-        <li>
+        {/* <li>
           <NavLink to="/admin" end activeClassName="active-link">
             Dashboard
           </NavLink>
-        </li>
+        </li> */}
         <li>
-          <NavLink to="/admin/categories" activeClassName="active-link">
+          <NavLink to="/admin/categories" activeClassName="active-link" style={{color: location.pathname == '/admin/categories' ? '#fff':'#888'}}>
             Categories
           </NavLink>
         </li>
         <li>
-          <NavLink to="/admin/products" activeClassName="active-link">
+          <NavLink to="/admin/products" activeClassName="active-link" style={{color: location.pathname == '/admin/products' ? '#fff':'#888'}}>
             Products
           </NavLink>
         </li>
         <li>
-          <NavLink to="/admin/subcategories" activeClassName="active-link">
+          <NavLink to="/admin/subcategories" activeClassName="active-link" style={{color: location.pathname == '/admin/subcategories' ? '#fff':'#888'}}>
             Subcategories
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/admin/orders" activeClassName="active-link">
-            Orders
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/admin/users" activeClassName="active-link">
-            Users
           </NavLink>
         </li>
       </ul>

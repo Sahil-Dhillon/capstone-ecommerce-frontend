@@ -29,9 +29,6 @@ import ProductManagement from "./pages/Vendor/ProductManagement";
 import InventoryManagement from "./pages/Vendor/InventoryManagement";
 import VendorLayout from "./layout/Vendor";
 import UserProfilePage from "./pages/UserProfile/UserProfilePage";
-import AddressCard from "./pages/UserProfile/AddressCard";
-import UserProfileCard from "./pages/UserProfile/UserProfileCard";
-import AddressDetailsModal from "./pages/UserProfile/AddressDetailsModal";
 import OrderSuccessPage from "./pages/OrderSuccessPage";
 import WishlistPage from "./pages/WishlistPage";
 import Checkout from "./pages/Checkout";
@@ -43,10 +40,13 @@ import FeaturesPage from "./pages/Features";
 import BlogPage from "./pages/Blog";
 import ProtectedRouteAdmin from "./routes/AdminRoute";
 import ProtectedRouteVendor from "./routes/VendorRoute";
+import ScrollToTop from "./utils/ScrollToTop";
+import OrderFailurePage from "./pages/OrderFailurePage";
 
 function App() {
   return (
     <Router>
+      <ScrollToTop/>
       {/* <Navbar /> */}
       {/* <CustomCursor/> */}
       <Routes>
@@ -75,6 +75,11 @@ function App() {
                   path="/products/:subCategoryName"
                   element={<ProductListPage />}
                 />
+
+<Route
+                  path="/productSearch/:searchBy"
+                  element={<ProductListPage />}
+                />
                 {/* <Route
                   path="/products/:subCategoryName"
                   element={<ProductListPage />}
@@ -93,6 +98,7 @@ function App() {
                 <Route path="/PricingPolicy" element={<PricingPolicy />} />
                 <Route path="/Features" element={<FeaturesPage />} />
                 <Route path="/Blog" element={<BlogPage />} />
+                <Route path="/OrderFailure" element={<OrderFailurePage />} />
               </Routes>
             </MainLayout>
           }

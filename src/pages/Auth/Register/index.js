@@ -52,25 +52,26 @@ const Register = () => {
         console.log("Registration successful:", response.data);
 
         // Automatically log in the user
-        const loginPayload = {
-          email: formData.email,
-          password: formData.password,
-        };
+        // const loginPayload = {
+        //   email: formData.email,
+        //   password: formData.password,
+        // };
 
         setTimeout(async () => {
-          try {
-            const loginResponse = await axios.post(`/auth/login`, loginPayload);
-            console.log("Login successful:", loginResponse.data);
-            localStorage.setItem("authToken", loginResponse.data.token);
-            updateUserData()
-            alert("Login successful!");
-            const redirectPath = searchParams.get("redirect") || "/";
-            navigate(redirectPath.startsWith('/') ? redirectPath : `/${redirectPath}`);
-          } catch (loginError) {
-            console.error("Error during login:", loginError);
-            alert("Login failed! Please try logging in manually.");
-            navigate("/auth/login"); // Redirect to login page
-          }
+          // try {
+          //   const loginResponse = await axios.post(`/auth/login`, loginPayload);
+          //   console.log("Login successful:", loginResponse.data);
+          //   localStorage.setItem("authToken", loginResponse.data.token);
+          //   updateUserData()
+          //   alert("Login successful!");
+          //   const redirectPath = searchParams.get("redirect") || "/";
+          //   navigate(redirectPath.startsWith('/') ? redirectPath : `/${redirectPath}`);
+          // } catch (loginError) {
+          //   console.error("Error during login:", loginError);
+          //   alert("Login failed! Please try logging in manually.");
+          //   navigate("/auth/login"); // Redirect to login page
+          // }
+          navigate("/auth/login");
         }, 1000); // Wait 2 seconds before logging in
       } catch (error) {
         console.error("Error during registration:", error);

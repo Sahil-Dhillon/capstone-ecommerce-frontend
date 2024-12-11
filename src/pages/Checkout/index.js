@@ -27,12 +27,12 @@ const Checkout = () => {
             axios.post('/order/placeorder', {
                 ...order,
                 addressId: selectedAddress,
-                orderStatus: "Completed",
+                orderStatus: "Pending",
                 payment: {
                     "paymentMethod": selectedPayment,
                     "totalAmount": order.totalAmount,
                     // "createdAt": "",
-                    "status": "Completed"
+                    "status": "Pending"
                 }
             }, {
                 headers: {
@@ -47,6 +47,7 @@ const Checkout = () => {
                     },
                 })
                 updateUserData()
+                
                 navigate("/OrderSuccess")
             })
         } else {
@@ -289,6 +290,12 @@ const Checkout = () => {
                                     onClick={() => handlePaymentSelection('cash')}
                                 >
                                     <FaMoneyBillAlt className="me-2" /> Cash on Delivery
+                                </button>
+                                <button
+                                    className={`list-group-item list-group-item-action ${selectedPayment === 'wallet' ? 'active' : ''}`}
+                                    onClick={() => handlePaymentSelection('wallet')}
+                                >
+                                    <FaMoneyBillAlt className="me-2" />UW Wallet
                                 </button>
                             </div>
                             <button

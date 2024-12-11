@@ -254,7 +254,7 @@ const Category = () => {
         <thead>
           <tr>
             <th>Category</th>
-            <th>Action</th>
+            {/* <th>Action</th> */}
           </tr>
         </thead>
         <tbody>
@@ -262,7 +262,7 @@ const Category = () => {
           {categories.map((category) => (
             <tr key={category.id}>
               <td>{category.name}</td>
-              <td>
+              {/* <td>
                 <Button
                   variant="warning"
                   size="sm"
@@ -281,7 +281,7 @@ const Category = () => {
                 >
                   <FaTrash />
                 </Button>
-              </td>
+              </td> */}
             </tr>
           ))}
         </tbody>

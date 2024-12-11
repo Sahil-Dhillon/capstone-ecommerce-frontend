@@ -18,6 +18,7 @@ const ProductPage = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const {productId}= useParams();
     const [product, setProduct] = useState({});
+    const [suggestedProducts, setSuggestedProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -26,6 +27,14 @@ const ProductPage = () => {
       axios.get(`/product/${productId}`).then((res)=>{
 
         setProduct({...res.data,listOfImages:[{imgUrl:res.data.profileImgUrl},...res.data.listOfImages]})
+        if (res.data.subCategory.subcategoryId) {
+          axios
+            .get(`/product/bySubCategory/${res.data.subCategory.subcategoryId}?pageSize=6`)
+            .then((suggestedProducts_res) => {
+              setSuggestedProducts(suggestedProducts_res.data);
+              // setLoading(false);
+            });
+        }
         setLoading(false)
       })
       .catch((err) => {
@@ -68,7 +77,7 @@ const ProductPage = () => {
     <div className="product-below-details">
         <ProductBelowDetails product={product} />
     </div>
-    <ProductCarousel title="YOU MIGHT ALSO LIKE" autoScroll={false}/>
+    <ProductCarousel title="YOU MIGHT ALSO LIKE" autoScroll={false} products={suggestedProducts} />
     <div className="m-5">
         <Ratings product={product} />
         

@@ -75,9 +75,9 @@ const Product = () => {
     return <ErrorPage message="Error Loading requests"/>
   }
   return (
-    <div className="product">
+    <div className="product container mt-3">
       <div className="d-flex flex-column">
-        <h3>Products</h3>
+        <h3>Product Requests</h3>
         <Table striped bordered hover responsive>
           <thead>
             <tr>

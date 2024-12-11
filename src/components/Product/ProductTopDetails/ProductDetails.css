@@ -54,21 +54,23 @@
     cursor: pointer;
   }
    */
-  .rating {
+
+.rating {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     font-size: 1rem;
     /* margin-top: 0rem; */
-  }
-  
-  .rating-stars {
-    color: #ffd700; /* Gold color for stars */
+}
+
+.rating-stars {
+    color: #ffd700;
+    /* Gold color for stars */
     font-size: 1.5rem;
-  }
-  
-  .rating-value {
+}
+
+.rating-value {
     font-size: 1rem;
-    color: #555; /* Neutral color for rating text */
-  }
-  
+    color: #555;
+    /* Neutral color for rating text */
+}

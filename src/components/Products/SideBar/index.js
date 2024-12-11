@@ -70,7 +70,7 @@ const Sidebar = () => {
     colors: [],
     gender: '',
   });
-  const categories = ['Electronics', 'Fashion', 'Home', 'Sports'];
+  // const categories = ['Electronics', 'Fashion', 'Home', 'Sports'];
   const brands = ['Nike', 'Adidas', 'Samsung', 'Apple'];
   const colors = ['Red', 'Blue', 'Green', 'Black', 'White'];
   const genderOptions = ['Men', 'Women', 'Unisex'];
@@ -109,7 +109,7 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <h2>Filters</h2>
-      <div className="filter-group">
+      {/* <div className="filter-group">
         <h3>Categories</h3>
         <div className="checkbox-group">
           {categories.map((category) => (
@@ -129,7 +129,7 @@ const Sidebar = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* <div className="filter-group">
         <h3>Brands</h3>
@@ -154,7 +154,7 @@ const Sidebar = () => {
   <h3>Price Range</h3>
   <div className="price-inputs">
     <label >
-      Min Price: ₹
+      Min : ₹
       <input
         type="number"
         value={filters.priceRange[0]}
@@ -162,11 +162,11 @@ const Sidebar = () => {
         min="0"
         max="10000"
         step="100"
-        className='mx-2'
+        className='mx-2 form-control'
       />
     </label>
     <label>
-      Max Price: ₹
+      Max : ₹
       <input
         type="number"
         value={filters.priceRange[1]}

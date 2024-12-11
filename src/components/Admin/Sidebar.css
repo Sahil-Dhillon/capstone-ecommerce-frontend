@@ -5,24 +5,27 @@
     color: white;
     position: fixed;
     padding: 20px;
-  }
-  
-  .sidebar ul {
+}
+
+.sidebar ul {
     list-style: none;
     padding: 0;
-  }
-  
-  .sidebar ul li {
+}
+
+.sidebar ul li {
     margin: 20px 0;
-  }
-  
-  .sidebar ul li a {
+}
+
+.sidebar ul li a {
     color: white;
     text-decoration: none;
-  }
-  
-  .sidebar ul li a.active-link {
+}
+
+.sidebar ul li a.active-link {
     font-weight: bold;
     color: #00bcd4;
-  }
-  
+}
+
+.active-link {
+    color: "#000";
+}

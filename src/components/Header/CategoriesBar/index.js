@@ -30,7 +30,7 @@ const CategoriesBar = () => {
 //     return <div>Error: {error}</div>;
 //   }
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light" style={{
+    <nav className="navbar navbar-expand-lg navbar bg-light" style={{
         backgroundColor: '#fff',
         display: isHomePage ? 'none' : 'block',
         color: isHomePage ? '#fff' : '#000',
@@ -38,7 +38,7 @@ const CategoriesBar = () => {
         // position: 'sticky',
         width: '100%',
         top:0,
-        zIndex: 1000,
+        zIndex: 1,
     }}>
                 <div className="container-fluid">
                     <button
@@ -59,8 +59,8 @@ const CategoriesBar = () => {
 
                             {categories.map((category,index)=>{
                                 return(
-                            <li className="nav-item" key={index}>
-                                <Link className="nav-link" to={`/category/${category.name.toLowerCase()}`}>
+                            <li className="nav-item"  key={index}>
+                                <Link className="nav-link"  to={`/category/${category.name.toLowerCase()}`}>
                                     {category.name}
                                 </Link>
                             </li>

@@ -3,8 +3,11 @@ import { BsHeart } from "react-icons/bs";
 import "./ProductDetails.css";
 import { AppContext } from "../../../context/AppContext";
 import axios from "axios";
+import { Toast, ToastContainer } from "react-bootstrap";
 
 const ProductDetails = ({ product }) => {
+  const [show, setShow] = useState(false);
+  
   const [selectedVariation, setSelectedVariation] = useState(product.variations[0]);
   const { addToCart , cart,authToken,updateUserData,userData} = useContext(AppContext);
   const handleAddToCart = () => {
@@ -26,6 +29,7 @@ const ProductDetails = ({ product }) => {
 
     }).then((x)=>{
         updateUserData()
+        setShow(true);
       })
     }else{
       console.log({...product,variations:selectedVariation})
@@ -49,8 +53,10 @@ const ProductDetails = ({ product }) => {
           <span className="rating-value">({product.productRating}/5)</span>
         </div>
       <h3>MRP: ₹ {product.price}</h3>
+      <h3>Available Quantity: {product.quantity}</h3>
       <p className="inclusive">Inclusive of all taxes (Also includes all applicable duties)</p>
 
+      {product.variations.length > 0 && 
       <div className="size-options">
         <p>Select variation</p>
         <div className="sizes">
@@ -65,15 +71,22 @@ const ProductDetails = ({ product }) => {
             </button>
           ))}
         </div>
-        {/* <a href="#" className="size-guide">
-          Size Guide
-        </a> */}
-      </div>
+        
+      </div>}
 
       <button className="add-to-bag" onClick={handleAddToCart}>Add to Bag</button>
-      <button className="favorite">
+      {/* <button className="favorite">
         <BsHeart /> Favorite
-      </button>
+      </button> */}
+
+<ToastContainer position="middle-center" className="p-3">
+        <Toast show={show} onClose={() => setShow(false)} delay={1000} autohide>
+          <Toast.Header closeButton>
+            <strong className="me-auto">Cart Notification</strong>
+          </Toast.Header>
+          <Toast.Body>Product added to cart successfully!</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </div>
   );
 };

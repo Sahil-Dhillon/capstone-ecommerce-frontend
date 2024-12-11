@@ -1,45 +1,30 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import img1 from '../../../assets/img/features_products/one plus 11.jpg'
 import img2 from '../../../assets/img/features_products/pic1.jpg'
 import img3 from '../../../assets/img/features_products/pic3.jpg'
 import img4 from '../../../assets/img/features_products/fashion.jpg'
 import img5 from '../../../assets/img/features_products/washing_machine.jpg'
 import img6 from '../../../assets/img/features_products/women fashion.jpg'
-const products = [
-  {
-    id: 1,
-    name: "1+ Quantum",
-    image: img1 // Replace with actual image URL
-  },
-  {
-    id: 2,
-    name: "Nike Pegasus 41 PRM",
-    image: img2, // Replace with actual image URL
-  },
-  {
-    id: 3,
-    name: "Tour Beats M2",
-    image: img3, // Replace with actual image URL
-  },
-  {
-    id: 4,
-    name: "Creased Effect Gilet",
-    image: img4, // Replace with actual image URL
-  },
-  {
-    id: 5,
-    name: "Mercurial Drum Speed",
-    image: img5, // Replace with actual image URL
-  },
-  {
-    id: 6,
-    name: "Long Mid-Rise TRF",
-    image: img6, // Replace with actual image URL
-  },
-  // Add more product objects as needed
-];
+import axios from "axios";
 
-const ProductCarousel = ({title, autoScroll}) => {
+
+const ProductCarousel = ({title, autoScroll, products}) => {
+  const [featuredProducts, setFeaturedProducts] = useState([])
+    const [loading, setLoading] = useState(true)
+    useEffect(()=>{
+      if(!products){
+        axios
+        .get(`product/search/featured?pageSize=10`)
+        .then((products_res) => {
+          setFeaturedProducts(products_res.data);
+          setLoading(false);
+          console.log(products_res.data)
+        });
+      }
+      else{
+        setLoading(false)
+      }
+    },[products])
     const carouselRef = useRef(null);
     useEffect(() => {
         const handleScroll = () => {
@@ -56,15 +41,23 @@ const ProductCarousel = ({title, autoScroll}) => {
           window.removeEventListener("scroll", handleScroll);
         };
       }, []);
+
+    if(loading){
+      return <></>
+    }else{
+      products = featuredProducts
+      if(featuredProducts.length == 0){
+        return <></>
+      }
     return (
       <div style={styles.container}>
         <h2 style={styles.heading}>{title}</h2>
         <div ref={carouselRef} style={styles.carousel}>
           {products.map((product) => (
-            <div key={product.id} style={styles.productCard}>
+            <div key={product.productId} style={styles.productCard}>
               <div style={styles.imageContainer}>
                 <img
-                  src={product.image}
+                  src={product.profileImgUrl}
                   alt={product.name}
                   style={styles.image}
                 />
@@ -77,7 +70,7 @@ const ProductCarousel = ({title, autoScroll}) => {
           ))}
         </div>
       </div>
-    );
+    )}
   };
   
   const styles = {
@@ -117,18 +110,25 @@ const ProductCarousel = ({title, autoScroll}) => {
       position: "absolute",
       bottom: "0",
       left: "0",
+      height:"300px",
       width: "100%",
-      background: "linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent)",
+      background: "linear-gradient(to top, rgba(0, 0, 0,1), transparent)",
       color: "#fff",
       textAlign: "left",
+      display: "flex",
+  flexDirection: "column",
+      justifyContent:"flex-end",
+      alignItems:"flex-start",
       padding: "10px 5px",
     },
     productName: {
+      // marginTop: "auto",
       fontSize: "16px",
       fontWeight: "bold",
       marginBottom: "5px",
     },
     shopButton: {
+      // marginTop: "auto",
       backgroundColor: "#fff",
       color: "#000",
       fontSize:"12px",

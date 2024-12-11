@@ -12,6 +12,7 @@ const ProductManagement = () => {
   const { addToCart , cart,authToken,updateUserData,userData} = useContext(AppContext);
   const [showModal, setShowModal] = useState(false);
   const [showSpecsModal, setShowSpecsModal] = useState(false);
+  const [loading, setLoading] = useState(true)
   const [newProduct, setNewProduct] = useState({
     name: '',
     brand: '',
@@ -42,7 +43,6 @@ const ProductManagement = () => {
   const [subcategories, setSubcategories] = useState([]);
   
   useEffect(() => {
-    // Fetch categories
     updateUserData()
     axios.get('/category/all')
     .then(response => {
@@ -50,6 +50,15 @@ const ProductManagement = () => {
     })
     .catch(error => console.error('Error fetching categories:', error));
   }, [authToken]);
+
+  useEffect(()=>{
+    if(userData){
+      axios.get(`/product/vendorId/${userData.email}`).then((res)=>{
+        setProducts(res.data)
+        setLoading(false)
+      })
+    }
+  },[])
 
   useEffect(()=>{
     axios.get(`/subcategory/byCategoryName/${newProduct.category}`)
@@ -79,11 +88,11 @@ const ProductManagement = () => {
   //     return data.location
   //   });
   // };
-  const uploadImage = (file) => {
+  const uploadImage = (name,index,file,sid) => {
     return new Promise((resolve, reject) => {
       const params = {
         Bucket: 'ecom-imgs',
-        Key: `images/${file.name}`,
+        Key: `images/${sid}/${name}_${index}`,
         Body: file,
         ContentType: file.type,
       };
@@ -175,13 +184,13 @@ const ProductManagement = () => {
 
       // Upload primary image (if available)
   if (newProduct.primaryImage) {
-    productRequest.profileImgUrl = await uploadImage(newProduct.primaryImage);
+    productRequest.profileImgUrl = await uploadImage(newProduct.name,1,newProduct.primaryImage, newProduct.subcategory);
   }
 
   // Upload gallery images (if any)
   if (newProduct.galleryImages.length > 0) {
     for (let imgIndex = 0; imgIndex < newProduct.galleryImages.length; imgIndex++) {
-      const imageUrl = await uploadImage(newProduct.galleryImages[imgIndex]);
+      const imageUrl = await uploadImage(newProduct.name,2+imgIndex,newProduct.galleryImages[imgIndex],newProduct.subcategory);
       productRequest.listOfImages.push(imageUrl);
     }
   }
@@ -218,9 +227,9 @@ const ProductManagement = () => {
     <div className="product-management p-4">
       <h3>Product Management</h3>
 
-      <Button className="mb-3" onClick={() => setShowModal(true)}>
+      <button className="mb-3 btn btn-sm btn-dark rounded" onClick={() => setShowModal(true)}>
         Add Product
-      </Button>
+      </button>
 
       <Table striped bordered hover>
         <thead>
@@ -231,10 +240,10 @@ const ProductManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {products.map((product, index) => (
+          {!loading && products.map((product, index) => (
             <tr key={index}>
               <td>{product.name}</td>
-              <td>{product.id}</td>
+              <td>{product.productId}</td>
               <td>{product.status}</td>
             </tr>
           ))}

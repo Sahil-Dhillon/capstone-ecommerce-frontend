@@ -10,13 +10,16 @@ const VendorLayout = ({children}) => {
           <VendorSidebar />
           <div className="dashboard-content">
             <h1>Welcome to Vendor Dashboard</h1>
-            <div className="stats">
+            {/* <div className="stats">
               <div className="stat-card">Total Categories: 10</div>
               <div className="stat-card">Total Products: 120</div>
               <div className="stat-card">Total Users: 500</div>
               <div className="stat-card">Total Orders: 45</div>
-            </div>
+            </div> */}
+            <div className='container'>
+
         {children}
+            </div>
         </div>
       </div>
     </div>
