@@ -30,8 +30,8 @@ const ProductManagement = () => {
 
 
   AWS.config.update({
-    accessKeyId: 'AKIAX7XJSL7WNCGGVJN3',
-    secretAccessKey: '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',
+    accessKeyId: PROCESS.ENV.S3_ACCESSID,
+    secretAccessKey: PROCESS.ENV.S3_ACCESSKEY,
     region: 'ap-south-1',
   });
 
