@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
 import { Table, Modal, Form, Button, InputGroup, FormControl } from "react-bootstrap";
 import { HiPencilSquare } from "react-icons/hi2";
+import Loading from "../../../components/Loading";
+import { AppContext } from "../../../context/AppContext";
 
 const InventoryManagement = () => {
   const [products, setProducts] = useState([
@@ -13,11 +16,23 @@ const InventoryManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
-
+  const [loading, setLoading] = useState(true)
   const [showQuantityModal, setShowQuantityModal] = useState(false);
   const [showAvailabilityModal, setShowAvailabilityModal] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
   const [newQuantity, setNewQuantity] = useState("");
+
+  const { userData} = useContext(AppContext);
+
+
+  useEffect(()=>{
+    if(userData){
+      axios.get(`/product/vendorId/${userData.email}`).then((res)=>{
+        setProducts(res.data)
+        setLoading(false)
+      })
+    }
+  },[])
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -34,13 +49,16 @@ const InventoryManagement = () => {
   };
 
   const handleUpdateQuantity = () => {
-    setProducts(
-      products.map((product) =>
-        product.id === currentProduct.id
-          ? { ...product, quantity: parseInt(newQuantity, 10) }
-          : product
-      )
-    );
+
+    axios.put(`/product/edit/${currentProduct.productId}/${newQuantity}`).then((res)=>{
+      alert("Product Quantity updated.")
+      if(userData){
+        axios.get(`/product/vendorId/${userData.email}`).then((res)=>{
+          setProducts(res.data)
+        setLoading(false)
+      })
+    }
+    })
     setShowQuantityModal(false);
     setCurrentProduct(null);
     setNewQuantity("");
@@ -51,22 +69,28 @@ const InventoryManagement = () => {
     setShowAvailabilityModal(true);
   };
 
-  const handleUpdateAvailability = () => {
-    setProducts(
-      products.map((product) =>
-        product.id === currentProduct.id
-          ? { ...product, available: !product.available }
-          : product
-      )
-    );
-    setShowAvailabilityModal(false);
-    setCurrentProduct(null);
-  };
+  // const handleUpdateAvailability = () => {
+  //   setProducts(
+  //     products.map((product) =>
+  //       product.id === currentProduct.id
+  //         ? { ...product, isAvailable: !product.isAavailable }
+  //         : product
+  //     )
+  //   );
+  //   setShowAvailabilityModal(false);
+  //   setCurrentProduct(null);
+  // };
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
   };
+
+  if(loading){
+    return(
+      <Loading/>
+    )
+  }
 
   return (
     <div className="inventory-management">
@@ -94,16 +118,18 @@ const InventoryManagement = () => {
         </thead>
         <tbody>
           {currentItems.map((product) => (
-            <tr key={product.id}>
+            <tr key={product.productId}>
               <td>{product.name}</td>
-              <td>{product.id}</td>
+              <td>{product.productId}</td>
 
               {/* Quantity Column */}
-              <td className="d-flex justify-content-between align-items-center">
+              <td className="d-flex justify-content-between align-items-center" >
                 {product.quantity}
-                <HiPencilSquare
+                <HiPencilSquare 
                   className="text-primary"
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer",
+                          display : product.status == "Accepted"? "block":"none"
+                  }}
                   onClick={() => handleEditQuantity(product)}
                 />
               </td>
@@ -112,12 +138,8 @@ const InventoryManagement = () => {
               <td className="">
 
                 <div className="d-flex justify-content-between align-items-center">
-                {product.available ? "Available" : "Not Available"}
-                <HiPencilSquare
-                  className="text-primary"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => handleEditAvailability(product)}
-                /></div>
+                {product.status}
+                </div>
               </td>
             </tr>
           ))}
@@ -177,7 +199,7 @@ const InventoryManagement = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* Edit Availability Modal */}
+      {/* Edit Availability Modal
       <Modal
         show={showAvailabilityModal}
         onHide={() => setShowAvailabilityModal(false)}
@@ -207,7 +229,7 @@ const InventoryManagement = () => {
             Change
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
     </div>
   );
 };

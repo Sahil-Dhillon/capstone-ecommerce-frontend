@@ -172,6 +172,7 @@ import axios from "axios";
 import CategoriesBar from "../../components/Header/CategoriesBar";
 import Loading from "../../components/Loading";
 import ErrorPage from "../../components/Error";
+import Skeleton from "react-loading-skeleton";
 
 const ProductListPage = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -225,9 +226,9 @@ const ProductListPage = () => {
     }
   }, [useLocation(),searchBy, searchQuery, currentPage, sortBy, sortOrder, searchParams]);
 
-  if (loading) {
-    return <Loading message={"Loading..."} />;
-  }
+  // if (loading) {
+  //   return <Loading message={"Loading..."} />;
+  // }
 
   if (error) {
     return <ErrorPage message={error} />;
@@ -268,20 +269,43 @@ const ProductListPage = () => {
             </select>
           </div>
         </div>
-
+          
         <div className="row">
           {/* <div className={`col-12 col-md-2 sidebar-container ${showSidebar ? "show" : "hide"}`}>
             <Sidebar />
-          </div> */}
+            </div> */}
           <div className="col">
+            {
+              loading
+              ? <div className="product-grid">
+                {Array(4)
+                  .fill()
+                  .map((_, idx) => (
+                      <div key={idx} style={{ border: '1px solid #ddd', borderRadius: '12px',
+                              padding: '20px', width: 'calc(25% - 10px)',
+                              background: '#fff', boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',}}>
+                          <Skeleton height={180} style={{ borderRadius: '10px' }} />
+                          <Skeleton width="80%" height={20} style={{ margin: '15px 0' }} />
+                          <Skeleton width="60%" height={15} />
+                          <Skeleton width="50%" height={20} style={{ margin: '15px 0' }} />
+                          <Skeleton width="100%" height={40} style={{ marginTop: '10px' }} />
+                      </div>
+                  ))}
+                  </div>
+              :
+            
+            products.length == 0 ? <div className="d-flex justify-content-center align-items-center">
+              <img src="https://cdn.dribbble.com/users/3512533/screenshots/14168376/media/1357b33cb4057ecb3c6f869fc977561d.jpg" className="notfound-image"/> 
+            </div> :
             <div className="product-grid">
               {products.map((product) => (
                 <ProductCard
                   product={product}
                   key={product.productId}
-                />
-              ))}
+                  />
+                ))}
             </div>
+            }
           </div>
         </div>
 

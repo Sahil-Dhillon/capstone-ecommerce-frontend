@@ -46,13 +46,20 @@
     padding: 2px 0;
 }
 
+.notfound-image {
+    width: 40%;
+    height: auto;
+    object-fit: cover;
+    text-align: center;
+}
+
 
 /* Product card styles */
 
 .product-grid>* {
-    flex: 1 1 calc(20% - 16px);
+    flex: 1 1 calc(25% - 16px);
     /* 4 items per row, adjustable */
-    max-width: calc(20% - 16px);
+    max-width: calc(25% - 16px);
     /* box-sizing: border-box; */
 }
 

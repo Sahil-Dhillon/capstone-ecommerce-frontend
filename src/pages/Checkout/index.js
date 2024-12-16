@@ -20,6 +20,41 @@ const Checkout = () => {
         setSelectedPayment(paymentMethod);
     };
 
+
+
+    const openJsCheckoutPopup = (orderId, txnToken, amount) => {
+        console.log(orderId, txnToken,amount)
+        var config = {
+            "root": "",
+            "flow": "DEFAULT",
+            "data": {
+                "orderId": orderId,
+                "token": txnToken,
+                "tokenType": "TXN_TOKEN",
+                "amount": amount
+            },
+            "handler": {
+                "notifyMerchant": function (eventName, data) {
+                    console.log("notifyMerchant handler function called");
+                    console.log("eventName => ", eventName);
+                    console.log("data => ", data);
+                    // navigate(0)
+                }
+            }
+        };
+        if (window.Paytm && window.Paytm.CheckoutJS) {
+            // initialze configuration using init method
+            window.Paytm.CheckoutJS.init(config).then(function onSuccess() {
+                // after successfully updating configuration, invoke checkoutjs
+                window.Paytm.CheckoutJS.invoke();
+            }).catch(function onError(error) {
+                console.log("error => ", error);
+            });
+        }
+    }
+
+
+
     const handlePlaceOrder = () => {
 
         if (selectedPayment && selectedAddress) {
@@ -40,6 +75,7 @@ const Checkout = () => {
                 }
             }).then((x) => {
                 setOrderPlaced(true);
+                // openJsCheckoutPopup(x.data.orderId,x.data.txnToken,x.data.totalAmount)
                 setOrder(x.data)
                 axios.put('/cartitem/emptyCart', {}, {
                     headers: {
@@ -47,7 +83,7 @@ const Checkout = () => {
                     },
                 })
                 updateUserData()
-                
+
                 navigate("/OrderSuccess")
             })
         } else {
@@ -68,15 +104,15 @@ const Checkout = () => {
         alert("Address added successfully.")
     };
 
-    if (orderPlaced) {
-        return (
-            <div className="container text-center mt-5">
-                <h2 className="text-success">Order Placed Successfully!</h2>
-                <p>Your order will be shipped shortly. Thank you for shopping with us!</p>
-                <a href="/" className="btn btn-primary mt-4">Go to Homepage</a>
-            </div>
-        );
-    }
+    // if (orderPlaced) {
+    //     return (
+    //         <div className="container text-center mt-5">
+    //             <h2 className="text-success">Order Placed Successfully!</h2>
+    //             <p>Your order will be shipped shortly. Thank you for shopping with us!</p>
+    //             <a href="/" className="btn btn-primary mt-4">Go to Homepage</a>
+    //         </div>
+    //     );
+    // }
     return (
         <div className="container mt-5">
             <h2 className="text-center mb-4">

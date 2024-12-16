@@ -42,6 +42,7 @@ import ProtectedRouteAdmin from "./routes/AdminRoute";
 import ProtectedRouteVendor from "./routes/VendorRoute";
 import ScrollToTop from "./utils/ScrollToTop";
 import OrderFailurePage from "./pages/OrderFailurePage";
+import TestPayment from "./pages/testPayment";
 
 function App() {
   return (
@@ -70,6 +71,10 @@ function App() {
                 <Route
                   path="/category/:categoryName"
                   element={<CategoriesPage />}
+                />
+                <Route
+                  path="/test/payment"
+                  element={<TestPayment />}
                 />
                 <Route
                   path="/products/:subCategoryName"

@@ -58,7 +58,7 @@ const ProductDetails = ({ product }) => {
 
       {product.variations.length > 0 && 
       <div className="size-options">
-        <p>Select variation</p>
+        <p>Select Size</p>
         <div className="sizes">
           {product.variations.map((variation, index) => (
             <button

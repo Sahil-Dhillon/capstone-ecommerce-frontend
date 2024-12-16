@@ -287,7 +287,8 @@ const Register = () => {
               }}
             >
               <h3>User Registered Successfully!</h3>
-              <p>Logging in...</p>
+              <p>An email has been sent to you to verify email.</p>
+              <p>Please verify to log in...</p>
             </div>
           </div>
         )}

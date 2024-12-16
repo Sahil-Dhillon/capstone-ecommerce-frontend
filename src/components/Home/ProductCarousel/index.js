@@ -6,25 +6,30 @@ import img4 from '../../../assets/img/features_products/fashion.jpg'
 import img5 from '../../../assets/img/features_products/washing_machine.jpg'
 import img6 from '../../../assets/img/features_products/women fashion.jpg'
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 
-const ProductCarousel = ({title, autoScroll, products}) => {
+const ProductCarousel = ({title, autoScroll, products_suggested}) => {
   const [featuredProducts, setFeaturedProducts] = useState([])
     const [loading, setLoading] = useState(true)
+    const [products, setProducts] = useState(products_suggested)
     useEffect(()=>{
-      if(!products){
+      if(!products_suggested){
         axios
-        .get(`product/search/featured?pageSize=10`)
+        .get(`/product/search/featured?pageSize=10`)
         .then((products_res) => {
           setFeaturedProducts(products_res.data);
+          setProducts(products_res.data)
+          // products = products_res.data
           setLoading(false);
           console.log(products_res.data)
         });
       }
       else{
         setLoading(false)
+        setProducts(products_suggested)
       }
-    },[products])
+    },[products_suggested])
     const carouselRef = useRef(null);
     useEffect(() => {
         const handleScroll = () => {
@@ -45,10 +50,6 @@ const ProductCarousel = ({title, autoScroll, products}) => {
     if(loading){
       return <></>
     }else{
-      products = featuredProducts
-      if(featuredProducts.length == 0){
-        return <></>
-      }
     return (
       <div style={styles.container}>
         <h2 style={styles.heading}>{title}</h2>
@@ -63,7 +64,7 @@ const ProductCarousel = ({title, autoScroll, products}) => {
                 />
                 <div style={styles.overlay}>
                   <p style={styles.productName}>{product.name}</p>
-                  <button style={styles.shopButton}>Shop Now</button>
+                  <Link to={`/product/${product.productId}`} style={styles.shopButton}>Shop Now</Link>
                 </div>
               </div>
             </div>

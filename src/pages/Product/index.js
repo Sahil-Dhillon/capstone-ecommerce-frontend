@@ -41,7 +41,7 @@ const ProductPage = () => {
         setError(err.message);
         setLoading(false);
         });
-    }, []);
+    }, [productId]);
 
 
     if (loading && product != {}) {
@@ -77,7 +77,7 @@ const ProductPage = () => {
     <div className="product-below-details">
         <ProductBelowDetails product={product} />
     </div>
-    <ProductCarousel title="YOU MIGHT ALSO LIKE" autoScroll={false} products={suggestedProducts} />
+    <ProductCarousel title="YOU MIGHT ALSO LIKE" autoScroll={false} products_suggested={suggestedProducts} />
     <div className="m-5">
         <Ratings product={product} />
         
